@@ -17,6 +17,7 @@ import {
   type LocationResult,
   type Stats,
   type Weather,
+  type Contributions,
 } from "../shared/model.js";
 import {
   HttpError,
@@ -27,6 +28,7 @@ import {
 import { readHome } from "./db.js";
 import { createWeatherService } from "./weather.js";
 import { createLocationSearch } from "./locations.js";
+import { createContributionsService } from "./contributions.js";
 import { mountMessages } from "./messages.js";
 export interface AppOptions {
   auth: SiteAuth;
@@ -38,6 +40,7 @@ export interface AppOptions {
   now?: () => Date;
   weather?: (location: WeatherLocation) => Promise<Weather>;
   locations?: (query: string) => Promise<LocationResult[]>;
+  contributions?: (year: number) => Promise<Contributions>;
 }
 export function createApp(db: DatabaseSync, o: AppOptions) {
   const app = express();
@@ -45,6 +48,7 @@ export function createApp(db: DatabaseSync, o: AppOptions) {
   const now = o.now || (() => new Date());
   const weather = o.weather || createWeatherService();
   const locations = o.locations || createLocationSearch();
+  const contributions = o.contributions || createContributionsService();
   const siteTimeZone = () => readHome(db).content.location.timeZone;
   const audioCover = createAudioCoverReader(db, o.uploads);
   app.disable("x-powered-by");
@@ -221,6 +225,11 @@ export function createApp(db: DatabaseSync, o: AppOptions) {
   });
   app.get("/api/weather", async (_req, res) =>
     res.json(await weather(readHome(db).content.location)),
+  );
+  app.get("/api/contributions", async (_req, res) =>
+    res.json(
+      await contributions(Number(zonedDay(now(), siteTimeZone()).slice(0, 4))),
+    ),
   );
   const locationLimiter = rateLimit({
     windowMs: 60000,

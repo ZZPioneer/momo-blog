@@ -773,3 +773,15 @@
     display: none;
   }
 }
+
+/* Midnight: cool contribution cells that still read against the dark card. */
+:root[data-theme="midnight"] .contribution-heatmap {
+  --heat-blue-1: #16324f;
+  --heat-blue-2: #1c4c7d;
+  --heat-blue-3: #2a6fb0;
+  --heat-blue-4: #56a1e4;
+  --heat-green-1: #0e4429;
+  --heat-green-2: #006d32;
+  --heat-green-3: #26a641;
+  --heat-green-4: #39d353;
+}

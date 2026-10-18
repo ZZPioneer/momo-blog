@@ -1,0 +1,61 @@
+{
+  "models": ["Potion-Maker/Pio"],
+  "message": {
+    "default": [
+      "你好呀，我是 Pio，会一直守在左下角陪着你~",
+      "今天也要开开心心的哦！",
+      "要四处逛逛吗？我在这里等你~",
+      "记得多休息，别一直盯着屏幕哦。",
+      "这个小站是主人一点点搭起来的呢。"
+    ],
+    "welcome": "欢迎来到 {text} 的小站，随便逛逛吧~",
+    "referrer": "你是从 {text} 过来的吧？欢迎欢迎~",
+    "hoverBody": ["干嘛呢，别乱摸啦~", "Pio 的头发很柔顺的哦，轻点摸~"],
+    "tapBody": ["别戳了别戳了，好痒的~", "再戳下去我可要生气啦！"],
+    "console": "悄悄告诉你，这里藏着一句只对开发者说的秘密：要不要试试在控制台里聊聊天？",
+    "copy": "复制成功！转载的话记得注明出处哦~",
+    "visibilitychange": "欢迎回来，刚刚去哪里忙啦？",
+    "photo": "咔嚓——记得把这张照片保存好哦~",
+    "goodbye": "那么，下次再见啦，我会想你的~",
+    "hitokoto": "「$1」——$2",
+    "changeSuccess": "换装完成！这身好看吗？",
+    "changeFail": "这个模型没有别的衣服了呢~"
+  },
+  "time": [
+    { "hour": "0-5", "text": "已经这么晚了，早点睡吧，别熬夜啦~" },
+    { "hour": "6-8", "text": "早安！新的一天，要不要先伸个懒腰？" },
+    { "hour": "9-11", "text": "上午的时光很适合写点什么或者做点小项目呢。" },
+    { "hour": "12-13", "text": "到饭点啦，记得好好吃饭哦。" },
+    { "hour": "14-17", "text": "下午好，喝杯水，继续加油吧！" },
+    { "hour": "18-22", "text": "忙了一天，晚上来看看小站放松一下吧。" },
+    { "hour": "23-23", "text": "夜深了，我陪你到这儿就好，快去休息吧。" }
+  ],
+  "seasons": [
+    { "date": "01/01", "text": "新年快乐！{year} 年也要元气满满哦~" },
+    { "date": "02/14", "text": "今天是情人节，祝你有人可爱，有梦可追~" },
+    { "date": "03/08", "text": "祝所有女生节日快乐！" },
+    { "date": "05/01", "text": "劳动节快乐，今天可以好好休息啦~" },
+    { "date": "06/01", "text": "儿童节快乐！愿你永远保留一点天真~" },
+    { "date": "10/01", "text": "国庆假期开始啦，出去玩要注意安全哦。" },
+    { "date": "10/31", "text": "今天是万圣节前夜，要糖吗？没有的话就捣蛋~" },
+    { "date": "12/24", "text": "平安夜快乐，愿你平安喜乐~" },
+    { "date": "12/25", "text": "圣诞快乐！收到喜欢的礼物了吗？" }
+  ],
+  "mouseover": [
+    { "selector": ".brand", "text": "这里是 {text} 的小站首页哦~" },
+    { "selector": ".site-header nav a", "text": "想去看看「{text}」吗？" },
+    { "selector": ".site-header .button", "text": "想和主人聊两句吗？点一下就好啦~" },
+    { "selector": ".card.photo-card", "text": "这些是主人拍下的日常切片。" },
+    { "selector": ".card.project-card", "text": "这里放着主人做过的作品与实验。" },
+    { "selector": ".card.article-card", "text": "主人最近写下的文字，都在这儿啦。" },
+    { "selector": ".card.calendar-card", "text": "今天是几号呢？看看日历吧。" },
+    { "selector": ".contribution-heatmap", "text": "绿色是 GitHub 的贡献，蓝色是本站发布的文章哦。" },
+    { "selector": ".album-wall", "text": "一整墙的日常瞬间，慢慢看~" },
+    { "selector": ".friends-grid", "text": "去朋友家坐坐吧，顺着链接能遇见有趣的人~" },
+    { "selector": ".site-footer", "text": "页脚里藏着一些小小的入口哦。" }
+  ],
+  "click": [
+    { "selector": ".brand", "text": "回到首页啦~" },
+    { "selector": ".site-footer button", "text": "要看看「{text}」吗？" }
+  ]
+}

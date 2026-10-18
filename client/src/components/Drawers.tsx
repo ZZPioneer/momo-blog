@@ -9,6 +9,7 @@ import { Album } from "./Album";
 import { ContactDialog } from "./Contact";
 import { Friends } from "./Friends";
 import { ArticleTime } from "./ArticleTime";
+import { ContributionHeatmap } from "./ContributionHeatmap";
 import { articleExcerpt } from "../../../shared/articles";
 
 const sectionInfo = {
@@ -150,6 +151,7 @@ export function ContentPage({
           </div>
         </header>
       )}
+      {panel === "projects" && !isDetail && <ContributionHeatmap />}
       <div className={`section-content${isDetail ? " section-detail" : ""}`}>
         <ContentBody
           panel={panel}

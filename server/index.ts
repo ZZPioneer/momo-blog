@@ -4,6 +4,7 @@ import { randomBytes } from "node:crypto";
 import { openDatabase } from "./db.js";
 import { createSiteAuth } from "./auth.js";
 import { createApp } from "./app.js";
+import { createContributionsService } from "./contributions.js";
 import { seed } from "./seed.js";
 const dataDir = resolve(process.env.DATA_DIR || "data");
 mkdirSync(dataDir, { recursive: true, mode: 0o700 });
@@ -20,6 +21,7 @@ const port = Number(process.env.PORT) || 4318;
 const baseURL = process.env.APP_URL || `http://127.0.0.1:${port}`;
 const secure = new URL(baseURL).protocol === "https:";
 const secret = process.env.AUTH_SECRET || localSecret(".auth-secret");
+const githubUser = (process.env.GITHUB_USER ?? "zzpioneer").trim();
 const db = openDatabase(join(dataDir, "site.db"));
 const uploads = join(dataDir, "uploads");
 const auth = await createSiteAuth(db, {
@@ -48,6 +50,7 @@ const app = createApp(db, {
   // Railway terminates HTTPS at its edge and forwards to this container.
   trustProxy: secure ? 1 : false,
   staticDir: resolve("dist/client"),
+  contributions: createContributionsService(fetch, githubUser),
 });
 const server = app.listen(port, process.env.HOST || "127.0.0.1", () =>
   console.log(

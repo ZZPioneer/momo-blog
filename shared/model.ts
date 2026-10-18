@@ -235,6 +235,19 @@ export interface Weather {
   updatedAt?: string;
   stale?: boolean;
 }
+export interface ContributionDay {
+  date: string;
+  count: number;
+  level: 0 | 1 | 2 | 3 | 4;
+}
+export interface Contributions {
+  available: boolean;
+  user?: string;
+  year?: number;
+  days?: ContributionDay[];
+  updatedAt?: string;
+  stale?: boolean;
+}
 export const mediaUrl = (id: string | null | undefined, thumb = false) =>
   id ? `/api/media/${encodeURIComponent(id)}${thumb ? "?size=thumb" : ""}` : "";
 export function referencedMedia(
