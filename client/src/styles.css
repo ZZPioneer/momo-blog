@@ -5085,6 +5085,196 @@ body:has(.admin-bar) .toast {
 }
 
 /* Contribution heatmap: articles render blue, GitHub renders green. */
+/* /projects：创作足迹与天气卡片并排，窄屏时上下堆叠。 */
+.projects-overview {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  max-width: 1680px;
+  margin: 22px auto 0;
+}
+.projects-overview .contribution-heatmap {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+@media (max-width: 1020px) {
+  .projects-overview {
+    flex-direction: column;
+  }
+  .weather-card {
+    flex: none;
+  }
+}
+/* 天气卡片：实时天气、当日极值与一句欢迎。 */
+.weather-card {
+  flex: 0 0 312px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px;
+  border: 1px solid var(--theme-line, #e2e4da);
+  border-radius: 13px;
+  background: var(--card);
+}
+.weather-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--theme-line, #e2e4da);
+}
+.weather-brand {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  white-space: nowrap;
+}
+.weather-date {
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.weather-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+}
+.weather-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.weather-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.weather-cond {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ink);
+  font-size: 14px;
+}
+.weather-cond > svg {
+  color: var(--theme-accent-ink, #668039);
+}
+.weather-cond small {
+  margin-left: 2px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.weather-temp {
+  color: var(--ink);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 42px;
+  font-weight: 500;
+  letter-spacing: -2px;
+  line-height: 1;
+  white-space: nowrap;
+}
+.weather-temp i {
+  margin-left: 2px;
+  color: var(--muted);
+  font-size: 16px;
+  font-style: normal;
+}
+.weather-clock {
+  margin: 0;
+  color: var(--muted);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 0.6px;
+}
+.weather-seconds {
+  font-size: 11px;
+  opacity: 0.65;
+}
+.weather-line {
+  margin: 0;
+}
+.weather-temps {
+  display: flex;
+  gap: 8px;
+}
+.weather-temp-item {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 4px 9px;
+  border-radius: 9px;
+  background: var(--theme-soft, #ebedf0);
+}
+.weather-temp-label {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+.weather-temp-value {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+.weather-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 12px;
+}
+.weather-param {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.weather-param > svg {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.weather-row-divider {
+  flex: 1;
+  height: 1px;
+  background: var(--theme-line, #e2e4da);
+}
+.weather-advice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: 9px;
+  background: var(--theme-soft, #ebedf0);
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.weather-advice > svg {
+  color: var(--theme-accent-ink, #668039);
+  flex-shrink: 0;
+}
+.weather-welcome {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid var(--theme-line, #e2e4da);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.weather-welcome > svg {
+  flex-shrink: 0;
+}
+.weather-place {
+  color: var(--theme-accent-ink, #668039);
+  font-weight: 600;
+}
 .contribution-heatmap {
   --heat-cell: 11px;
   --heat-gap: 3px;
@@ -5098,9 +5288,7 @@ body:has(.admin-bar) .toast {
   --heat-green-2: #40c463;
   --heat-green-3: #30a14e;
   --heat-green-4: #216e39;
-  width: fit-content;
-  max-width: 50%;
-  margin: 22px auto 0;
+  width: 100%;
   padding: 18px 20px;
   border: 1px solid var(--theme-line, var(--line));
   border-radius: 13px;

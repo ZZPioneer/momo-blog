@@ -17,6 +17,7 @@ import {
   type LocationResult,
   type Stats,
   type Weather,
+  type VisitorPlace,
   type Contributions,
 } from "../shared/model.js";
 import {
@@ -27,6 +28,7 @@ import {
 } from "./media.js";
 import { readHome } from "./db.js";
 import { createWeatherService } from "./weather.js";
+import { createVisitorLocationService } from "./visitor-location.js";
 import { createLocationSearch } from "./locations.js";
 import { createContributionsService } from "./contributions.js";
 import { mountMessages } from "./messages.js";
@@ -39,6 +41,7 @@ export interface AppOptions {
   secure?: boolean;
   now?: () => Date;
   weather?: (location: WeatherLocation) => Promise<Weather>;
+  visitorLocation?: (ip: string) => Promise<VisitorPlace | null>;
   locations?: (query: string) => Promise<LocationResult[]>;
   contributions?: (year: number) => Promise<Contributions>;
 }
@@ -47,6 +50,7 @@ export function createApp(db: DatabaseSync, o: AppOptions) {
   if (o.trustProxy !== undefined) app.set("trust proxy", o.trustProxy);
   const now = o.now || (() => new Date());
   const weather = o.weather || createWeatherService();
+  const visitorLocation = o.visitorLocation || createVisitorLocationService();
   const locations = o.locations || createLocationSearch();
   const contributions = o.contributions || createContributionsService();
   const siteTimeZone = () => readHome(db).content.location.timeZone;
@@ -226,6 +230,12 @@ export function createApp(db: DatabaseSync, o: AppOptions) {
   app.get("/api/weather", async (_req, res) =>
     res.json(await weather(readHome(db).content.location)),
   );
+  app.get("/api/visitor-location", async (req, res) => {
+    const place = await visitorLocation(
+      req.ip || req.socket.remoteAddress || "",
+    );
+    res.json(place ? { available: true, place } : { available: false });
+  });
   app.get("/api/contributions", async (_req, res) =>
     res.json(
       await contributions(Number(zonedDay(now(), siteTimeZone()).slice(0, 4))),

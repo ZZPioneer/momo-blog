@@ -75,3 +75,60 @@ test("不同地点的天气和失败缓存隔离，请求使用设置的坐标�
   assert.equal((await weather(shanghai)).temperature, 28);
   assert.equal(requests.length, 3);
 });
+test("当日详情字段随请求一起解析，日出日落只保留时钟", async () => {
+  const requests: URL[] = [];
+  const weather = createWeatherService((async (input) => {
+    requests.push(new URL(String(input)));
+    return Response.json({
+      current: {
+        temperature_2m: 28.4,
+        weather_code: 0,
+        relative_humidity_2m: 68,
+        apparent_temperature: 31.2,
+        wind_speed_10m: 2.4,
+        wind_direction_10m: 96,
+      },
+      daily: {
+        temperature_2m_max: [28.6],
+        temperature_2m_min: [24.1],
+        precipitation_sum: [0],
+        precipitation_probability_max: [0],
+        uv_index_max: [5.2],
+        sunrise: ["2026-10-19T05:58"],
+        sunset: ["2026-10-19T17:23"],
+      },
+    });
+  }) as typeof fetch);
+  const value = await weather();
+  assert.equal(value.available, true);
+  assert.equal(value.tempHigh, 28.6);
+  assert.equal(value.tempLow, 24.1);
+  assert.equal(value.apparent, 31.2);
+  assert.equal(value.humidity, 68);
+  assert.equal(value.windSpeed, 2.4);
+  assert.equal(value.windDirection, 96);
+  assert.equal(value.precipitationProbability, 0);
+  assert.equal(value.precipitation, 0);
+  assert.equal(value.uvIndex, 5.2);
+  assert.equal(value.sunrise, "05:58");
+  assert.equal(value.sunset, "17:23");
+  const query = requests[0].searchParams;
+  assert.match(query.get("current")!, /apparent_temperature/);
+  assert.match(query.get("daily")!, /uv_index_max/);
+  assert.equal(query.get("wind_speed_unit"), "ms");
+  assert.equal(query.get("forecast_days"), "1");
+});
+test("只有核心字段时详情留空，不影响可用性", async () => {
+  const weather = createWeatherService((async () =>
+    Response.json({
+      current: { temperature_2m: 18.5, weather_code: 1 },
+      daily: {},
+    })) as typeof fetch);
+  const value = await weather();
+  assert.equal(value.available, true);
+  assert.equal(value.temperature, 18.5);
+  assert.equal(value.tempHigh, undefined);
+  assert.equal(value.humidity, undefined);
+  assert.equal(value.sunrise, undefined);
+  assert.equal(value.sunset, undefined);
+});

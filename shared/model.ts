@@ -234,6 +234,27 @@ export interface Weather {
   code?: number;
   updatedAt?: string;
   stale?: boolean;
+  /* 富字段：由服务端聚合 Open-Meteo 当日数据，缺省时卡片显示占位符。 */
+  tempHigh?: number;
+  tempLow?: number;
+  apparent?: number;
+  humidity?: number;
+  windSpeed?: number;
+  windDirection?: number;
+  precipitationProbability?: number;
+  precipitation?: number;
+  uvIndex?: number;
+  sunrise?: string;
+  sunset?: string;
+}
+export interface VisitorPlace {
+  city: string;
+  region: string;
+  label: string;
+}
+export interface VisitorLocation {
+  available: boolean;
+  place?: VisitorPlace;
 }
 export interface ContributionDay {
   date: string;

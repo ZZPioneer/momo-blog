@@ -10,6 +10,7 @@ import { ContactDialog } from "./Contact";
 import { Friends } from "./Friends";
 import { ArticleTime } from "./ArticleTime";
 import { ContributionHeatmap } from "./ContributionHeatmap";
+import { WeatherCard } from "./WeatherCard";
 import { articleExcerpt } from "../../../shared/articles";
 
 const sectionInfo = {
@@ -151,7 +152,12 @@ export function ContentPage({
           </div>
         </header>
       )}
-      {panel === "projects" && !isDetail && <ContributionHeatmap />}
+      {panel === "projects" && !isDetail && (
+        <div className="projects-overview">
+          <ContributionHeatmap />
+          <WeatherCard />
+        </div>
+      )}
       <div className={`section-content${isDetail ? " section-detail" : ""}`}>
         <ContentBody
           panel={panel}
@@ -565,16 +571,20 @@ function ContentBody({
               {t.source || t.artist}
             </p>
           ))}
-          <h3>天气与标识</h3>
-          <p>
-            天气：
-            <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">
-              Open-Meteo
-            </a>
-            （CC BY 4.0）；城市搜索数据来自 GeoNames。时间使用站主设置的{" "}
-            {content!.location.timeZone}
-            时区。像素猫为本项目原创品牌标识。
-          </p>
+        <h3>天气与标识</h3>
+        <p>
+          天气：
+          <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">
+            Open-Meteo
+          </a>
+          （CC BY 4.0）；城市搜索数据来自 GeoNames。时间使用站主设置的{" "}
+          {content!.location.timeZone}
+          时区。像素猫为本项目原创品牌标识。
+        </p>
+        <p>
+          访客位置：天气卡片的欢迎语由服务端按访客 IP 向第三方定位服务（淘宝
+          IP 库或 ipwho.is）查询大致位置，按 IP 缓存数小时，查询失败或内网地址时改用站点地点；不记录、不公开访客位置。
+        </p>
         </div>
       )}
     </>
