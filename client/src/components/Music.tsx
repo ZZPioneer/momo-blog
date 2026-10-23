@@ -243,6 +243,9 @@ function usePlayer() {
 }
 type Player = ReturnType<typeof usePlayer>;
 const Context = createContext<Player>(null!);
+export function useMusic() {
+  return useContext(Context);
+}
 export function MusicProvider({ children }: { children: ReactNode }) {
   const player = usePlayer();
   return (

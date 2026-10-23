@@ -68,6 +68,7 @@ export const trackSchema = z.object({
   coverId: mediaId,
   demo: z.boolean(),
   source: text(2000),
+  lyrics: text(6000).optional(),
 });
 export const timeZoneSchema = z
   .string()
@@ -80,6 +81,27 @@ export const timeZoneSchema = z
       return false;
     }
   }, "请选择有效时区");
+export const tagSchema = z.object({
+  id,
+  name: text(40).min(1, "请填写标签名"),
+  count: z.number().int().min(0).max(9999).optional(),
+  color: text(32)
+    .refine(
+      (v) => !v || /^#[0-9a-fA-F]{3,8}$/.test(v) || v === "none",
+      "请输入 hex 颜色，如 #ff8800",
+    )
+    .optional(),
+  url: z
+    .string()
+    .trim()
+    .max(2048)
+    .refine(
+      (v) => !v || /^(\/|https?:\/\/)/i.test(v),
+      "链接需以 / 或 http(s):// 开头",
+    )
+    .optional(),
+});
+export type Tag = z.infer<typeof tagSchema>;
 export const weatherLocationSchema = z.object({
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
@@ -137,6 +159,7 @@ export const contentSchema = z
     collections: z.array(collectionSchema).max(200),
     friends: z.array(friendSchema).max(100).default([]),
     tracks: z.array(trackSchema).max(100),
+    tags: z.array(tagSchema).max(100).default([]),
   })
   .superRefine((c, ctx) => {
     for (const key of [
@@ -146,6 +169,7 @@ export const contentSchema = z
       "collections",
       "friends",
       "tracks",
+      "tags",
     ] as const) {
       const ids = c[key].map((v) => v.id);
       if (new Set(ids).size !== ids.length)

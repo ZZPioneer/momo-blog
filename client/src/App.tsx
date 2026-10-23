@@ -17,7 +17,8 @@ import {
   useClock,
   type Panel,
 } from "./components/HomeCards";
-import { MusicCard, SectionPlayer } from "./components/Music";
+import { MusicCard } from "./components/Music";
+import { FloatingMusic } from "./components/FloatingMusic";
 import { AdminBar, LoginDialog } from "./components/Auth";
 import type { EditorSection } from "./components/Editor";
 import {
@@ -235,6 +236,7 @@ export default function App() {
                 id={route.id}
                 onSelect={(id) => route.navigate(route.page, id)}
                 onEdit={() => setEditor(route.page as Section)}
+                onAbout={() => open("about")}
               />
             </Suspense>
           )}
@@ -244,7 +246,6 @@ export default function App() {
             © {zonedDay(now, content.location.timeZone).slice(0, 4)}{" "}
             {content.profile.name}
           </span>
-          {route.page !== "home" && <SectionPlayer />}
           <div>
             <button onClick={() => open("sources")}>素材说明</button>
             <button onClick={() => setLogin(true)}>
@@ -255,6 +256,7 @@ export default function App() {
           </div>
         </footer>
       </div>
+      <FloatingMusic />
       {panel && (
         <Suspense fallback={<ModalFallback onClose={() => setPanel(null)} />}>
           <ContentDialog

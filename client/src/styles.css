@@ -1287,6 +1287,383 @@ img.project-cover {
 .audio-error button {
   text-decoration: underline;
 }
+
+/* 悬浮音乐播放器：固定在页面最右侧，可沿右边缘上下拖动。 */
+.music-fab {
+  position: fixed;
+  right: 16px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: min(78vw, 320px);
+  padding: 8px 10px 8px 4px;
+  background: color-mix(in srgb, var(--theme-surface, #fff) 88%, transparent);
+  border: 1px solid var(--theme-line, #e1e3d8);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.music-fab__grip {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 100%;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--theme-muted, #96998d);
+  cursor: grab;
+  touch-action: none;
+}
+.music-fab__grip:active {
+  cursor: grabbing;
+}
+.music-fab__main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink, #20221e);
+}
+.music-fab__cover {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border-radius: 11px;
+  object-fit: cover;
+}
+.music-fab__meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.music-fab__title {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.music-fab__artist {
+  font-size: 11px;
+  color: var(--theme-muted, #96998d);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.music-fab__bar {
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 4px;
+  background: linear-gradient(
+    to right,
+    var(--theme-soft, #a5c543) 0%,
+    var(--theme-soft, #a5c543) var(--progress),
+    var(--theme-line, #dcded5) var(--progress),
+    var(--theme-line, #dcded5) 100%
+  );
+}
+.music-fab__controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.music-fab__btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink, #20221e);
+  cursor: pointer;
+}
+.music-fab__btn:hover {
+  background: color-mix(in srgb, var(--theme-soft, #a5c543) 22%, transparent);
+}
+
+/* 右侧抽屉：点击悬浮器拉出音乐详情。 */
+.music-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.42);
+  animation: music-overlay-in 0.2s ease;
+}
+.music-drawer {
+  width: min(460px, 96vw);
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 22px 26px 36px;
+  background: var(--theme-surface, #fff);
+  border-left: 1px solid var(--theme-line, #e1e3d8);
+  color: var(--ink, #20221e);
+  animation: music-drawer-in 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes music-overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes music-drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+.music-drawer__head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -22px -26px 16px;
+  padding: 18px 26px 12px;
+  background: var(--theme-surface, #fff);
+  box-shadow: 0 1px 0 var(--theme-line, #e1e3d8);
+}
+.music-drawer__head .eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  color: var(--theme-muted, #96998d);
+}
+.music-drawer__close {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink, #20221e);
+  cursor: pointer;
+}
+.music-drawer__close:hover {
+  background: color-mix(in srgb, var(--theme-line, #e1e3d8) 60%, transparent);
+}
+.music-drawer__cover-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 18px;
+}
+.music-drawer__cover {
+  width: min(208px, 64%);
+  aspect-ratio: 1 / 1;
+  height: auto;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.24);
+}
+.music-drawer__info {
+  text-align: center;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+.music-drawer__info strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.music-drawer__info small {
+  color: var(--theme-muted, #96998d);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.music-drawer__progress {
+  margin: 18px 0 5px;
+}
+.music-drawer__time {
+  font-size: 10px;
+}
+.music-drawer__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin: 14px 0 8px;
+}
+.music-drawer__controls button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink, #20221e);
+  cursor: pointer;
+}
+.music-drawer__controls button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.music-drawer__controls .play-button {
+  width: 56px;
+  height: 56px;
+  background: var(--theme-soft, #a5c543);
+  color: var(--theme-on-soft, #1c1e18);
+}
+.music-drawer__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 4px;
+}
+.music-drawer .playback-mode-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  padding: 7px 12px;
+  border: 1px solid var(--theme-line, #e1e3d8);
+  border-radius: 999px;
+  background: none;
+  color: var(--ink, #20221e);
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.music-drawer__volume {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 160px;
+  color: var(--theme-muted, #96998d);
+}
+.music-drawer__volume input[type="range"] {
+  flex: 1;
+  accent-color: var(--theme-soft, #a5c543);
+}
+.music-drawer__section {
+  margin-top: 22px;
+  border-top: 1px solid var(--theme-line, #e1e3d8);
+  padding-top: 14px;
+}
+.music-drawer__section h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--theme-muted, #96998d);
+}
+.music-drawer__playlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.music-drawer__track {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  text-align: left;
+  color: var(--ink, #20221e);
+  cursor: pointer;
+}
+.music-drawer__track:hover {
+  background: color-mix(in srgb, var(--theme-line, #e1e3d8) 55%, transparent);
+}
+.music-drawer__track.is-current {
+  background: color-mix(in srgb, var(--theme-soft, #a5c543) 20%, transparent);
+}
+.music-drawer__index {
+  font-size: 11px;
+  color: var(--theme-muted, #96998d);
+  font-variant-numeric: tabular-nums;
+  width: 18px;
+}
+.music-drawer__track-cover {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+.music-drawer__track-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.music-drawer__track-info strong {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.music-drawer__track-info small {
+  font-size: 11px;
+  color: var(--theme-muted, #96998d);
+}
+.music-drawer__track-status {
+  font-size: 11px;
+  color: var(--theme-soft, #6f8a2e);
+}
+.music-drawer__lyrics {
+  list-style: none;
+  margin: 0;
+  padding: 4px 2px;
+  max-height: min(38vh, 340px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.music-drawer__lyrics li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--theme-muted, #96998d);
+  transition: color 0.25s ease, transform 0.25s ease, font-weight 0.25s ease;
+}
+.music-drawer__lyrics li.is-active {
+  color: var(--ink, #20221e);
+  font-weight: 600;
+  transform: scale(1.03);
+  transform-origin: left;
+}
+.music-drawer__no-lyrics {
+  font-size: 13px;
+  color: var(--theme-muted, #96998d);
+}
+@media (max-width: 520px) {
+  .music-fab {
+    right: 10px;
+    max-width: 84vw;
+  }
+}
 .site-footer {
   height: 29px;
   flex-shrink: 0;
@@ -5085,25 +5462,400 @@ body:has(.admin-bar) .toast {
 }
 
 /* Contribution heatmap: articles render blue, GitHub renders green. */
-/* /projects：创作足迹与天气卡片并排，窄屏时上下堆叠。 */
+/* /projects：创作足迹与天气卡片并排，窄屏时上下堆叠；下方为标签跑马灯。 */
 .projects-overview {
   display: flex;
+  flex-direction: column;
   align-items: stretch;
   gap: 20px;
   max-width: 1680px;
   margin: 22px auto 0;
 }
-.projects-overview .contribution-heatmap {
+.projects-overview__top {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
+/* 左侧竖向列：热力图在上、跑马灯在下，整体与右侧天气卡等高。 */
+.projects-overview__main {
   flex: 1 1 auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.projects-overview .contribution-heatmap {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+/* 跑马灯撑满热力图下方的空白，竖向居中两行标签。 */
+.tag-marquee {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+.projects-overview__tools {
+  display: flex;
+  justify-content: flex-end;
 }
 @media (max-width: 1020px) {
-  .projects-overview {
+  .projects-overview__top {
     flex-direction: column;
+  }
+  .projects-overview__main {
+    /* 窄屏时保持竖向堆叠即可 */
   }
   .weather-card {
     flex: none;
   }
+  .welcome-card {
+    flex: none;
+  }
+}
+/* 标签跑马灯：双行反向滚动 + 两侧渐隐 + 悬停暂停。 */
+.tag-marquee {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--theme-line, #e4e7dc);
+  border-radius: 16px;
+  background: var(--theme-surface, #fffefa);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 24px rgba(20, 24, 16, 0.06);
+}
+.tag-marquee__viewport {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+.tag-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: tag-marquee-scroll 32s linear infinite;
+}
+.tag-marquee__track--reverse {
+  animation-direction: reverse;
+}
+.tag-marquee__viewport:hover .tag-marquee__track {
+  animation-play-state: paused;
+}
+.tag-marquee__group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 12px;
+  flex-shrink: 0;
+}
+@keyframes tag-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.tag-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--theme-line, #e4e7dc);
+  background: var(--theme-soft, #eef0e9);
+  color: var(--tag-color, inherit);
+  font-size: 15px;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    color 0.4s,
+    border-color 0.4s,
+    transform 0.4s;
+}
+.tag-marquee__item:hover {
+  color: var(--theme-accent-ink, #8baa3b);
+  border-color: var(--theme-accent-ink, #8baa3b);
+  transform: translateY(-1px);
+}
+.tag-marquee__name {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.tag-marquee__count {
+  font-size: 13px;
+  opacity: 0.65;
+}
+.tag-marquee__icon {
+  opacity: 0.55;
+}
+.tag-marquee__item:hover .tag-marquee__icon {
+  opacity: 0.9;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tag-marquee__track {
+    animation: none;
+  }
+}
+/* 欢迎卡片：照片背景 + 暗色遮罩 + 头像/署名 + 统计 + 双按钮（参考 nw177 同款）。 */
+.welcome-card {
+  position: relative;
+  flex: 0 0 33.333%;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid var(--theme-line, #e2e4da);
+  border-radius: 13px;
+  background: linear-gradient(135deg, #6f7d54, #3f4a32);
+  color: #fff;
+  isolation: isolate;
+}
+.welcome-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.04);
+  z-index: 0;
+}
+.welcome-card__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.66) 0%,
+    rgba(0, 0, 0, 0.3) 52%,
+    rgba(0, 0, 0, 0.46) 100%
+  );
+}
+.welcome-card__body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 20px 20px 18px;
+}
+.welcome-card__header,
+.welcome-card__footer {
+  flex: 1 1 0;
+  display: flex;
+  min-height: 0;
+}
+.welcome-card__header {
+  align-items: flex-start;
+}
+.welcome-card__footer {
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 14px;
+}
+.welcome-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.welcome-card__eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+.welcome-card__avatar {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+.welcome-card__avatar--initial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+.welcome-card__desc {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  min-height: 3.2em;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+.welcome-card__cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.18em;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+  animation: welcome-cursor-blink 1s steps(1) infinite;
+}
+@keyframes welcome-cursor-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .welcome-card__cursor {
+    animation: none;
+  }
+}
+.welcome-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: auto 0 0;
+  padding: 12px 0 4px;
+}
+.welcome-card__stats div {
+  text-align: center;
+}
+.welcome-card__stats dt {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.72);
+}
+.welcome-card__stats dd {
+  margin: 2px 0 0;
+}
+.welcome-card__stats a {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-decoration: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.2s;
+}
+.welcome-card__stats a:hover {
+  opacity: 0.78;
+}
+.welcome-card__actions {
+  display: flex;
+  gap: 10px;
+}
+.welcome-card__btn {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.welcome-card__btn:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+.welcome-card__btn:active {
+  transform: translateY(0);
+}
+/* 标签管理弹窗。 */
+.editor-hint {
+  color: var(--theme-muted, #66685f);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+.editor-hint b {
+  color: inherit;
+  font-weight: 600;
+}
+.tag-editor-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tag-editor-list > li {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px;
+  border: 1px solid var(--theme-line, #e4e7dc);
+  border-radius: 12px;
+  background: var(--theme-soft, #f3f4f0);
+}
+.tag-editor-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--theme-muted, #66685f);
+}
+.tag-editor-field input {
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--theme-line, #d9dcd2);
+  border-radius: 10px;
+  background: var(--card, #fffefa);
+  color: inherit;
+  font: inherit;
+}
+.tag-editor-field.tag-editor-color,
+.tag-editor-field.tag-editor-count {
+  width: 96px;
+}
+.tag-editor-field.tag-editor-url {
+  flex: 1 1 200px;
+}
+.tag-editor-remove {
+  color: var(--theme-muted, #66685f);
+  display: inline-flex;
+  align-items: center;
+}
+.tag-editor-empty {
+  color: var(--theme-muted, #66685f);
+  font-size: 14px;
 }
 /* 天气卡片：实时天气、当日极值与一句欢迎。 */
 .weather-card {

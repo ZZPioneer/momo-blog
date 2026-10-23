@@ -11,6 +11,9 @@ import { Friends } from "./Friends";
 import { ArticleTime } from "./ArticleTime";
 import { ContributionHeatmap } from "./ContributionHeatmap";
 import { WeatherCard } from "./WeatherCard";
+import { WelcomeCard } from "./WelcomeCard";
+import { TagMarquee } from "./TagMarquee";
+import { TagEditor } from "./TagEditor";
 import { articleExcerpt } from "../../../shared/articles";
 
 const sectionInfo = {
@@ -111,13 +114,16 @@ export function ContentPage({
   id,
   onSelect,
   onEdit,
+  onAbout,
 }: {
   panel: Section;
   id?: string;
   onSelect: (id: string) => void;
   onEdit: () => void;
+  onAbout: () => void;
 }) {
-  const { content } = useSite();
+  const { content, auth } = useSite();
+  const [tagEditor, setTagEditor] = useState(false);
   const info = sectionInfo[panel];
   const isDetail =
     panel !== "friends" &&
@@ -154,10 +160,27 @@ export function ContentPage({
       )}
       {panel === "projects" && !isDetail && (
         <div className="projects-overview">
-          <ContributionHeatmap />
-          <WeatherCard />
+          <div className="projects-overview__top">
+            <div className="projects-overview__main">
+              <ContributionHeatmap />
+              <TagMarquee />
+            </div>
+            <WeatherCard />
+            <WelcomeCard onAbout={onAbout} />
+          </div>
+          {auth?.authenticated && (
+            <div className="projects-overview__tools">
+              <button
+                className="text-button"
+                onClick={() => setTagEditor(true)}
+              >
+                编辑标签
+              </button>
+            </div>
+          )}
         </div>
       )}
+      {tagEditor && <TagEditor onClose={() => setTagEditor(false)} />}
       <div className={`section-content${isDetail ? " section-detail" : ""}`}>
         <ContentBody
           panel={panel}

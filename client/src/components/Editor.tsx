@@ -515,6 +515,11 @@ function ContentEditor({
                       {field("artist", "艺术家")}
                       {asset("audioId", "音乐", "audio")}
                       {asset("coverId", "音乐封面")}
+                      {field(
+                        "lyrics",
+                        "歌词（可选，每行一句，可加 [mm:ss] 时间轴）",
+                        true,
+                      )}
                       <small>
                         自动读取歌曲内嵌封面，没有封面时显示默认唱片；也可以上传自己的封面。
                       </small>

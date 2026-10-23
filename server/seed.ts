@@ -163,8 +163,11 @@ export async function seed(
         coverId: ids[2],
         demo: true,
         source: "assets/demo/generate-audio.py，原创合成器旋律",
+        lyrics:
+          "[00:00] 窗外的光慢慢醒来\n[00:08] 咖啡还冒着一点白\n[00:16] 慢一点，也没关系\n[00:24] 让今天先打个哈欠\n[00:32] 把昨天留在这张椅子上\n[00:40] 听一段没有目的的旋律\n[00:48] 风从窗帘的缝隙里经过\n[00:56] 我们终于，只是坐着",
       },
     ],
+    tags: [],
   };
   contentSchema.parse(c);
   db.prepare("INSERT INTO site_content(id,revision,data) VALUES(1,1,?)").run(
