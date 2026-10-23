@@ -128,7 +128,7 @@ function ContentEditor({
   const entry = (section === "profile"
     ? { ...content!.profile, ...content!.social }
     : list.find((i) => i.id === selected)) as unknown as Entry | undefined;
-  const update = (key: string, value: string | boolean | null) => {
+  const update = (key: string, value: string | boolean | null | string[]) => {
     change((c) =>
       section === "profile"
         ? ["github", "email", "xiaohongshu", "bilibili"].includes(key)
@@ -468,6 +468,28 @@ function ContentEditor({
                       />
                       {field("body", "正文", true)}
                       {field("url", "外部文章链接（可选）")}
+                      <label>
+                        标签（逗号分隔，可选）
+                        <input
+                          type="text"
+                          placeholder="如：前端, 随笔"
+                          value={
+                            Array.isArray(entry?.tags)
+                              ? (entry.tags as string[]).join(", ")
+                              : ""
+                          }
+                          onChange={(e) =>
+                            update(
+                              "tags",
+                              e.target.value
+                                .split(/[,，]/)
+                                .map((t) => t.trim())
+                                .filter(Boolean),
+                            )
+                          }
+                        />
+                      </label>
+                      <small>标签会显示在文章卡片底部，方便归类浏览。</small>
                       {asset("coverId", "文章封面（可选）")}
                       <small>
                         不上传封面即使用纯文字布局；已有封面可以直接移除。

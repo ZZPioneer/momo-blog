@@ -33,6 +33,7 @@ export const articleSchema = z.object({
   date: articleDateSchema,
   coverId: mediaId,
   url: webLink,
+  tags: z.array(text(40)).max(8).optional(),
 });
 export const photoSchema = z.object({
   id,

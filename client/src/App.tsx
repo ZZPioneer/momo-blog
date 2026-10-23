@@ -18,12 +18,16 @@ import {
   type Panel,
 } from "./components/HomeCards";
 import { MusicCard } from "./components/Music";
+import { ClassicHome } from "./components/ClassicHome";
+import { AboutPage } from "./components/AboutPage";
 import { FloatingMusic } from "./components/FloatingMusic";
+import { ModeToggle, type HomeMode } from "./components/ModeToggle";
 import { AdminBar, LoginDialog } from "./components/Auth";
 import type { EditorSection } from "./components/Editor";
 import {
   usePageNavigation,
   pageUrl,
+  pageNames,
   sectionNames,
   type Page,
   type Section,
@@ -85,6 +89,38 @@ export default function App() {
   const route = usePageNavigation();
   const [inbox, setInbox] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
+  const [homeMode, setHomeMode] = useState<HomeMode>(() => {
+    const saved = localStorage.getItem("momoblog:homeMode");
+    return saved === "classic" ? "classic" : "bento";
+  });
+  const [modeSwitching, setModeSwitching] = useState(false);
+  useEffect(() => {
+    localStorage.setItem("momoblog:homeMode", homeMode);
+  }, [homeMode]);
+  // 经典模式是阅读流布局，暂时收起左下角的看板娘，避免遮挡侧栏信息。
+  useEffect(() => {
+    const active = homeMode === "classic" && route.page === "home";
+    document.body.classList.toggle("home-classic-mode", active);
+    return () => document.body.classList.remove("home-classic-mode");
+  }, [homeMode, route.page]);
+  // 关于页是整幅海报式排版，收起看板娘与悬浮播放器，避免压住右侧牌组。
+  useEffect(() => {
+    const active = route.page === "about";
+    document.body.classList.toggle("about-mode", active);
+    return () => document.body.classList.remove("about-mode");
+  }, [route.page]);
+  // 文章页复刻 windndream /technology 的干净卡片栅格，同样收起看板娘、聊天气泡与悬浮播放器。
+  useEffect(() => {
+    const active = route.page === "articles";
+    document.body.classList.toggle("articles-mode", active);
+    return () => document.body.classList.remove("articles-mode");
+  }, [route.page]);
+  const switchHomeMode = (next: HomeMode) => {
+    if (next === homeMode) return;
+    setHomeMode(next);
+    setModeSwitching(true);
+    window.setTimeout(() => setModeSwitching(false), 460);
+  };
   useEffect(() => {
     if (!editing) setEditor(null);
   }, [editing]);
@@ -110,12 +146,13 @@ export default function App() {
     }
     setPanel(null);
     if (content) {
-      document.title = `${route.page === "home" ? "首页" : sectionNames[route.page]} · ${content.profile.name}`;
+      document.title = `${pageNames[route.page]} · ${content.profile.name}`;
       if (changedPage || changedDetail)
         main.current?.focus({ preventScroll: true });
     }
   }, [route.page, route.id, content?.profile.name]);
   const open = (kind: Panel, id?: string) => {
+    if (kind === "about") return route.navigate("about");
     if (Object.hasOwn(sectionNames, kind)) route.navigate(kind as Section, id);
     else setPanel({ kind, id });
   };
@@ -160,7 +197,7 @@ export default function App() {
             </span>
           </a>
           <nav aria-label="主导航">
-            {(["home", ...Object.keys(sectionNames)] as Page[]).map((page) => (
+            {(Object.keys(pageNames) as Page[]).map((page) => (
               <a
                 key={page}
                 href={pageUrl(page)}
@@ -168,11 +205,14 @@ export default function App() {
                 aria-current={route.page === page ? "page" : undefined}
                 onClick={(event) => route.follow(event, page)}
               >
-                {page === "home" ? "首页" : sectionNames[page]}
+                {pageNames[page]}
               </a>
             ))}
           </nav>
           <div className="header-contact">
+            {route.page === "home" && (
+              <ModeToggle mode={homeMode} onChange={switchHomeMode} />
+            )}
             <span>
               <i />
               <span
@@ -203,31 +243,39 @@ export default function App() {
           tabIndex={-1}
           className={
             route.page === "home"
-              ? "bento-grid"
-              : `section-page section-${route.page}`
+              ? `${homeMode === "bento" ? "bento-grid" : "home-classic"}${modeSwitching ? " is-switching" : ""}`
+              : route.page === "about"
+                ? "page-about"
+                : `section-page section-${route.page}`
           }
         >
           {route.page === "home" ? (
-            <>
-              <div className="bento-row top-row">
-                <Hero {...actions} />
-                <PhotoCard {...actions} />
-                <ClockCard now={now} edit={setEditor} />
-              </div>
-              <div className="bento-row middle-row">
-                <ProjectCard {...actions} />
-                <ArticleCard {...actions} />
-                <CalendarCard now={now} />
-              </div>
-              <div className="bento-row bottom-row">
-                <CheckinCard />
-                <CollectionCard {...actions} />
-                <MusicCard
-                  onEdit={() => setEditor("tracks")}
-                  onContact={() => open("contact")}
-                />
-              </div>
-            </>
+            homeMode === "bento" ? (
+              <>
+                <div className="bento-row top-row">
+                  <Hero {...actions} />
+                  <PhotoCard {...actions} />
+                  <ClockCard now={now} edit={setEditor} />
+                </div>
+                <div className="bento-row middle-row">
+                  <ProjectCard {...actions} />
+                  <ArticleCard {...actions} />
+                  <CalendarCard now={now} />
+                </div>
+                <div className="bento-row bottom-row">
+                  <CheckinCard />
+                  <CollectionCard {...actions} />
+                  <MusicCard
+                    onEdit={() => setEditor("tracks")}
+                    onContact={() => open("contact")}
+                  />
+                </div>
+              </>
+            ) : (
+              <ClassicHome now={now} {...actions} />
+            )
+          ) : route.page === "about" ? (
+            <AboutPage now={now} {...actions} />
           ) : (
             <Suspense fallback={null}>
               <ContentPage

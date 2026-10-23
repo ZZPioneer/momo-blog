@@ -15,6 +15,7 @@ import { WelcomeCard } from "./WelcomeCard";
 import { TagMarquee } from "./TagMarquee";
 import { TagEditor } from "./TagEditor";
 import { articleExcerpt } from "../../../shared/articles";
+import { ArticlesList } from "./ArticlesList";
 
 const sectionInfo = {
   projects: {
@@ -333,31 +334,12 @@ function ContentBody({
             )}
           </article>
         ) : (
-          <div className="article-list">
-            {content!.articles.map((a) => (
-              <button
-                className={`${a.coverId ? "" : "text-only"}${a.title.trim() ? "" : " untitled"}`}
-                key={a.id}
-                onClick={() => setSelected(a.id)}
-              >
-                {a.coverId && (
-                  <SafeImage src={mediaUrl(a.coverId, true)} alt="" />
-                )}
-                <div>
-                  {a.title.trim() && <h3>{a.title}</h3>}
-                  {articleExcerpt(a) && <p>{articleExcerpt(a)}</p>}
-                  <ArticleTime
-                    date={a.date}
-                    timeZone={content!.location.timeZone}
-                  />
-                </div>
-                <ArrowUpRight size={20} />
-              </button>
-            ))}
-            {!content!.articles.length && (
-              <Empty>这里会慢慢长出新的文字。</Empty>
-            )}
-          </div>
+          <ArticlesList
+            articles={content!.articles}
+            author={content!.profile.name}
+            timeZone={content!.location.timeZone}
+            onSelect={setSelected}
+          />
         ))}
       {panel === "projects" &&
         (project ? (

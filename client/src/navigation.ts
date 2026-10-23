@@ -8,12 +8,23 @@ export const sectionNames = {
   friends: "友链",
 } as const;
 export type Section = keyof typeof sectionNames;
-export type Page = "home" | Section;
+
+// 所有可直达的页面（含首页与独立页面）。顺序即页头导航顺序。
+export const pageNames = {
+  home: "首页",
+  projects: "项目",
+  articles: "文字",
+  photos: "相册",
+  collections: "收集",
+  friends: "友链",
+  about: "关于",
+} as const;
+export type Page = keyof typeof pageNames;
 
 function readRoute(): { page: Page; id?: string } {
   const path = location.pathname.replace(/^\/+|\/+$/g, "");
   return {
-    page: Object.hasOwn(sectionNames, path) ? (path as Section) : "home",
+    page: Object.hasOwn(pageNames, path) ? (path as Page) : "home",
     id: new URLSearchParams(location.search).get("item") || undefined,
   };
 }
