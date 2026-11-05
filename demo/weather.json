@@ -1,0 +1,18 @@
+{
+  "available": true,
+  "temperature": 18.9,
+  "code": 1,
+  "tempHigh": 21.1,
+  "tempLow": 16,
+  "apparent": 16.7,
+  "humidity": 55,
+  "windSpeed": 3.98,
+  "windDirection": 162,
+  "precipitationProbability": 84,
+  "precipitation": 0.7,
+  "uvIndex": 8.6,
+  "sunrise": "05:51",
+  "sunset": "19:26",
+  "updatedAt": "2026-11-05T05:51:03.553Z",
+  "stale": true
+}

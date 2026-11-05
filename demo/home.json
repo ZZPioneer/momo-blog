@@ -1,0 +1,172 @@
+{
+  "revision": 1,
+  "content": {
+    "theme": "fresh",
+    "location": {
+      "name": "Sydney",
+      "region": "AU",
+      "timeZone": "Australia/Sydney",
+      "latitude": -33.8688,
+      "longitude": 151.2093
+    },
+    "profile": {
+      "name": "Momo",
+      "avatarId": "edebb460-a2dd-4d3f-b7ea-97e702262b88",
+      "headline": "把好奇心，\n变成作品。",
+      "introduction": "我是 Momo，喜欢设计、代码和日常里的小发现。",
+      "description": "这里是我的作品、文字与日常收藏。",
+      "aboutBody": "这是我的个人空间。把作品、文字和日常放在一起，也为下一次突如其来的灵感，留一个位置。",
+      "eyebrow": "DESIGN · CODE · EVERYDAY",
+      "motto": "Made with curiosity."
+    },
+    "social": {
+      "github": "",
+      "email": "",
+      "xiaohongshu": "",
+      "bilibili": ""
+    },
+    "projects": [
+      {
+        "id": "sample-project",
+        "title": "Idea Garden",
+        "summary": "给每一个想法，一个生长的地方。",
+        "description": "这是一个用于展示的虚构笔记应用：把随手记下的想法、喜欢的图片和生活碎片，整理成自己的数字花园。\n\n登录后可以替换项目名称、封面、介绍和链接。",
+        "coverId": null,
+        "url": ""
+      }
+    ],
+    "articles": [
+      {
+        "id": "start",
+        "title": "从一个小想法开始",
+        "summary": "关于创造，也关于生活。",
+        "date": "2026-09-12",
+        "coverId": "627400d7-2308-4ce7-896e-8fdf21dea49d",
+        "url": "",
+        "body": "我喜欢那些还很小的想法。它们可能是散步时冒出来的一句话，也可能是觉得「这里还可以更好一点」的瞬间。\n\n先记录下来，再做一个能用的小版本。把下一步缩小到今天就能开始的程度，想法才会慢慢长成生活的一部分。\n\n这是一段用于展示阅读效果的示例文字，可登录后直接替换。",
+        "tags": [
+          "随笔",
+          "创造"
+        ]
+      },
+      {
+        "id": "garden",
+        "title": "我的数字花园，慢慢长大",
+        "summary": "给想法一个可以停留的地方。",
+        "date": "2026-09-08",
+        "coverId": "07a7a19f-701b-4d12-99f6-6bd6f7518a4f",
+        "url": "",
+        "body": "把喜欢的图片、读到的句子，以及还没想明白的事放在一起，是整理日常的一种方式。\n\n花园不必每一天都盛开。记下一点，整理一点，留下以后再回来的入口。\n\n此为可替换的示例文字。",
+        "tags": [
+          "数字花园",
+          "整理"
+        ]
+      },
+      {
+        "id": "sydney",
+        "title": "在悉尼，收集日常的光",
+        "summary": "生活碎片，慢慢收藏。",
+        "date": "2026-09-02",
+        "coverId": "a9c918b9-fe49-47c7-8d52-54a25963646b",
+        "url": "",
+        "body": "有时候，一天最值得记住的部分，只是树叶间的一点光，或走过海边时刚好吹来的风。\n\n想把这些微小又明亮的片刻收藏起来。等忙碌的时候，回来看看。\n\n此为可替换的示例文字。",
+        "tags": [
+          "生活",
+          "悉尼"
+        ]
+      }
+    ],
+    "photos": [
+      {
+        "id": "sydney",
+        "mediaId": "c867582d-6d57-4a84-afe7-c5eb77ea19eb",
+        "title": "走走，停停。",
+        "caption": "在光影之间，留住片刻。",
+        "location": "Sydney",
+        "source": "AI 生成的悉尼示意图，非站主实拍",
+        "demo": true
+      },
+      {
+        "id": "photo-0",
+        "mediaId": "627400d7-2308-4ce7-896e-8fdf21dea49d",
+        "title": "午后一杯",
+        "caption": "喜欢的小片刻。",
+        "location": "",
+        "source": "Unsplash · https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=1000&q=85&fit=max",
+        "demo": true
+      },
+      {
+        "id": "photo-1",
+        "mediaId": "07a7a19f-701b-4d12-99f6-6bd6f7518a4f",
+        "title": "走进绿色里",
+        "caption": "喜欢的小片刻。",
+        "location": "",
+        "source": "Unsplash · https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1000&q=85&fit=max",
+        "demo": true
+      },
+      {
+        "id": "photo-2",
+        "mediaId": "a9c918b9-fe49-47c7-8d52-54a25963646b",
+        "title": "海风来信",
+        "caption": "喜欢的小片刻。",
+        "location": "",
+        "source": "Unsplash · https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1000&q=85&fit=max",
+        "demo": true
+      },
+      {
+        "id": "photo-3",
+        "mediaId": "6d2564ca-ccf4-4f4d-8fcf-e424844da5b1",
+        "title": "日光漫游",
+        "caption": "喜欢的小片刻。",
+        "location": "",
+        "source": "Unsplash · https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1000&q=85&fit=max",
+        "demo": true
+      }
+    ],
+    "collections": [
+      {
+        "id": "design",
+        "title": "让想法长成设计",
+        "description": "一些值得留下的灵感。",
+        "kind": "灵感",
+        "imageId": "beeba24b-b8af-4a05-a919-efc462a47a63",
+        "url": "",
+        "source": "本站原创排版示例",
+        "demo": true
+      },
+      {
+        "id": "architecture",
+        "title": "在留白里，发现更多",
+        "description": "观察空间、比例与留白。",
+        "kind": "图片",
+        "imageId": "92df1835-6077-41db-b327-ae045126a905",
+        "url": "",
+        "source": "演示素材，非站主作品",
+        "demo": true
+      },
+      {
+        "id": "mdn",
+        "title": "MDN Web Docs",
+        "description": "把好奇心，变成可以实现的东西。",
+        "kind": "网站",
+        "imageId": null,
+        "url": "https://developer.mozilla.org/zh-CN/",
+        "source": "MDN",
+        "demo": true
+      }
+    ],
+    "friends": [],
+    "tracks": [
+      {
+        "id": "slow-morning",
+        "title": "Slow Morning",
+        "artist": "本站原创 · 演示旋律",
+        "audioId": "070db296-6a5a-4dcf-be19-6616ffdf210d",
+        "coverId": "a9c918b9-fe49-47c7-8d52-54a25963646b",
+        "demo": true,
+        "source": "assets/demo/generate-audio.py，原创合成器旋律",
+        "lyrics": "[00:00] 窗外的光慢慢醒来\n[00:08] 咖啡还冒着一点白\n[00:16] 慢一点，也没关系\n[00:24] 让今天先打个哈欠\n[00:32] 把昨天留在这张椅子上\n[00:40] 听一段没有目的的旋律\n[00:48] 风从窗帘的缝隙里经过\n[00:56] 我们终于，只是坐着"
+      }
+    ]
+  }
+}
