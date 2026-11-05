@@ -349,6 +349,7 @@ export function createApp(db: DatabaseSync, o: AppOptions) {
         "/collections",
         "/friends",
         "/about",
+        "/lab",
       ],
       (_req, res) =>
         res.sendFile(join(o.staticDir!, "index.html"), {

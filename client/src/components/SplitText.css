@@ -1,0 +1,13 @@
+.split-parent {
+  font-size: clamp(1.8rem, 5vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  max-width: 100%;
+  margin: 0;
+}
+.split-parent .split-char,
+.split-parent .split-word,
+.split-parent .split-line {
+  will-change: transform, opacity, filter;
+}

@@ -18,6 +18,7 @@ export const pageNames = {
   collections: "收集",
   friends: "友链",
   about: "关于",
+  lab: "实验室",
 } as const;
 export type Page = keyof typeof pageNames;
 

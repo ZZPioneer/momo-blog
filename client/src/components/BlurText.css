@@ -1,0 +1,11 @@
+/* BlurText has no font-size/weight of its own (it inherits), so give the lab
+   preview a hero-scale size + bold weight when this className is applied. */
+.blur-text-lab {
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-kerning: normal;
+  text-rendering: geometricPrecision;
+}

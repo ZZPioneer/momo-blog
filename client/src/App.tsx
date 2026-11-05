@@ -20,6 +20,7 @@ import {
 import { MusicCard } from "./components/Music";
 import { ClassicHome } from "./components/ClassicHome";
 import { AboutPage } from "./components/AboutPage";
+import { LabPage } from "./components/LabPage";
 import { FloatingMusic } from "./components/FloatingMusic";
 import { ModeToggle, type HomeMode } from "./components/ModeToggle";
 import { AdminBar, LoginDialog } from "./components/Auth";
@@ -114,6 +115,12 @@ export default function App() {
     const active = route.page === "articles";
     document.body.classList.toggle("articles-mode", active);
     return () => document.body.classList.remove("articles-mode");
+  }, [route.page]);
+  // 实验室页是组件预览 + 源码并列展示，同样收起看板娘与悬浮播放器，避免压住预览与代码。
+  useEffect(() => {
+    const active = route.page === "lab";
+    document.body.classList.toggle("lab-mode", active);
+    return () => document.body.classList.remove("lab-mode");
   }, [route.page]);
   const switchHomeMode = (next: HomeMode) => {
     if (next === homeMode) return;
@@ -276,6 +283,8 @@ export default function App() {
             )
           ) : route.page === "about" ? (
             <AboutPage now={now} {...actions} />
+          ) : route.page === "lab" ? (
+            <LabPage />
           ) : (
             <Suspense fallback={null}>
               <ContentPage
