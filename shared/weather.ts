@@ -1,5 +1,49 @@
 /* 天气展示辅助函数：WMO 天气代码、风向、蒲福风级、紫外线等级与穿衣建议。
    服务端只做数据透传，展示逻辑在此共享，便于测试与复用。 */
+import type { Weather } from "./model.js";
+
+const num = (value: unknown) =>
+  Number.isFinite(value) ? (value as number) : undefined;
+
+const first = (value: unknown) => (Array.isArray(value) ? value[0] : undefined);
+
+// Open-Meteo 按请求时区返回本地 ISO 时间（如 "2026-10-19T05:58"），
+// 卡片只需要时钟部分。
+const clock = (value: unknown) => {
+  if (typeof value !== "string") return undefined;
+  const time = value.split("T")[1];
+  return time && /^\d{2}:\d{2}/.test(time) ? time.slice(0, 5) : undefined;
+};
+
+// Open-Meteo 响应 → 卡片数据。服务端与静态演示站共用，避免两份解析逻辑漂移。
+export function parseWeatherPayload(data: unknown): Weather | null {
+  const current = (data as { current?: Record<string, unknown> })?.current;
+  if (
+    !Number.isFinite(current?.temperature_2m) ||
+    !Number.isFinite(current?.weather_code)
+  )
+    return null;
+  // 核心字段有效即视为可用；其余字段缺失时留空，由卡片显示占位符。
+  const daily = (data as { daily?: Record<string, unknown> })?.daily ?? {};
+  return {
+    available: true,
+    temperature: current!.temperature_2m as number,
+    code: current!.weather_code as number,
+    tempHigh: num(first(daily.temperature_2m_max)),
+    tempLow: num(first(daily.temperature_2m_min)),
+    apparent: num(current!.apparent_temperature),
+    humidity: num(current!.relative_humidity_2m),
+    windSpeed: num(current!.wind_speed_10m),
+    windDirection: num(current!.wind_direction_10m),
+    precipitationProbability: num(first(daily.precipitation_probability_max)),
+    precipitation: num(first(daily.precipitation_sum)),
+    uvIndex: num(first(daily.uv_index_max)),
+    sunrise: clock(first(daily.sunrise)),
+    sunset: clock(first(daily.sunset)),
+    updatedAt: new Date().toISOString(),
+    stale: false,
+  };
+}
 
 export type WeatherKind =
   | "sunny"

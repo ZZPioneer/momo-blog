@@ -30,6 +30,10 @@ test-results/
 .idea/
 .vscode/
 
+# Generated demo snapshot and temp data for the GitHub Pages build
+client/public/demo/
+pages-demo-data/
+
 # Only the approved demo avatar belongs in the repository
 assets/profile/*
 !assets/profile/avatar-demo.webp

@@ -1,5 +1,6 @@
 import { useLayoutEffect } from "react";
 import type { SiteTheme } from "../../shared/model";
+import { withBase } from "./base";
 
 const themeColors: Record<SiteTheme, string> = {
   fresh: "#f7f6f2",
@@ -8,9 +9,9 @@ const themeColors: Record<SiteTheme, string> = {
 };
 
 export function themeCatAsset(theme: SiteTheme = "fresh") {
-  return theme === "blush"
-    ? "/assets/themes/cartoon-cat.svg"
-    : "/assets/cat.svg";
+  return withBase(
+    theme === "blush" ? "/assets/themes/cartoon-cat.svg" : "/assets/cat.svg",
+  );
 }
 
 export function useSiteTheme(theme: SiteTheme = "fresh") {

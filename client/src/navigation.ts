@@ -1,4 +1,5 @@
 import { useEffect, useState, type MouseEvent } from "react";
+import { basePath, currentPath } from "./base";
 
 export const sectionNames = {
   projects: "项目",
@@ -23,7 +24,7 @@ export const pageNames = {
 export type Page = keyof typeof pageNames;
 
 function readRoute(): { page: Page; id?: string } {
-  const path = location.pathname.replace(/^\/+|\/+$/g, "");
+  const path = currentPath().replace(/^\/+|\/+$/g, "");
   return {
     page: Object.hasOwn(pageNames, path) ? (path as Page) : "home",
     id: new URLSearchParams(location.search).get("item") || undefined,
@@ -31,7 +32,7 @@ function readRoute(): { page: Page; id?: string } {
 }
 
 export function pageUrl(page: Page, id?: string) {
-  return `${page === "home" ? "/" : `/${page}`}${id ? `?${new URLSearchParams({ item: id })}` : ""}`;
+  return `${basePath}${page === "home" ? "/" : `/${page}`}${id ? `?${new URLSearchParams({ item: id })}` : ""}`;
 }
 
 // Keep the application and its single audio player mounted between sections.

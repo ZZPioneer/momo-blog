@@ -294,8 +294,17 @@ export interface Contributions {
   updatedAt?: string;
   stale?: boolean;
 }
-export const mediaUrl = (id: string | null | undefined, thumb = false) =>
-  id ? `/api/media/${encodeURIComponent(id)}${thumb ? "?size=thumb" : ""}` : "";
+// 静态演示站（GitHub Pages）没有服务端，示例素材以 "demo:" 前缀写进内容，
+// 客户端启动时注入部署前缀，直接指向随构建分发的静态文件。
+let demoMediaBase = "";
+export const setDemoMediaBase = (base: string) => {
+  demoMediaBase = base;
+};
+export const mediaUrl = (id: string | null | undefined, thumb = false) => {
+  if (!id) return "";
+  if (id.startsWith("demo:")) return demoMediaBase + id.slice(5);
+  return `/api/media/${encodeURIComponent(id)}${thumb ? "?size=thumb" : ""}`;
+};
 export function referencedMedia(
   c: HomeContent,
 ): Map<string, "image" | "audio"> {

@@ -1,12 +1,18 @@
 /*!
  * Live2D Widget autoload — 本地内置版
  * 基于 live2d-widgets (https://github.com/stevenjoezhang/live2d-widget, GPLv3)
- * 所有运行库与模型均从本站 /live2d/ 目录加载，不依赖外部 CDN。
+ * 所有运行库与模型均从本站 live2d 目录加载，不依赖外部 CDN。
  */
 (function () {
   "use strict";
 
-  var live2d_path = "/live2d/";
+  // 由脚本自身地址推导资源前缀，兼容自托管的 "/live2d/" 与
+  // GitHub Pages 之类的子路径部署（形如 "/momo-blog/live2d/"）。
+  var live2d_path = (function () {
+    var script = document.currentScript;
+    if (script && script.src) return script.src.replace(/autoload\.js.*$/, "");
+    return "/live2d/";
+  })();
 
   // 移动端（窄屏）不加载看板娘，避免占用带宽与遮挡内容
   if (typeof screen !== "undefined" && screen.width < 768) return;

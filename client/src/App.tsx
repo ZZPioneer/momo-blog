@@ -3,6 +3,7 @@ import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { useSite } from "./store";
 import { watchSiteDay } from "./daily-refresh";
 import { themeCatAsset, useSiteTheme } from "./theme";
+import { currentPath, withBase } from "./base";
 import { mediaUrl, zonedDay } from "../../shared/model";
 import { Cat, Dialog, Editable, EditButton } from "./components/Common";
 import {
@@ -86,7 +87,7 @@ export default function App() {
   }, [avatarId, fallbackIcon]);
   const [panel, setPanel] = useState<{ kind: Panel; id?: string } | null>(null),
     [editor, setEditor] = useState<EditorSection | null>(null),
-    [login, setLogin] = useState(location.pathname === "/login");
+    [login, setLogin] = useState(currentPath() === "/login");
   const route = usePageNavigation();
   const [inbox, setInbox] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
@@ -195,7 +196,7 @@ export default function App() {
           <a
             className="brand"
             aria-label={`${content.profile.name} 首页`}
-            href="/"
+            href={withBase("/")}
             onClick={(event) => route.follow(event, "home")}
           >
             <span>
@@ -363,8 +364,8 @@ export default function App() {
         <LoginDialog
           onClose={() => {
             setLogin(false);
-            if (location.pathname === "/login")
-              history.replaceState(null, "", "/");
+            if (currentPath() === "/login")
+              history.replaceState(null, "", withBase("/"));
           }}
         />
       )}

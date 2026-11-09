@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import { request } from "./api";
+import { currentPath } from "./base";
 import {
   contentSchema,
   type HomeContent,
@@ -79,7 +80,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
       setHome(h);
       setAuth(state.auth);
       setStats(state.stats);
-      if (!state.auth.authenticated && location.pathname !== "/login") {
+      if (!state.auth.authenticated && currentPath() !== "/login") {
         const counted = await request<Stats>("/api/visits", {
           method: "POST",
           body: JSON.stringify({ pageViewId: pageView.current }),

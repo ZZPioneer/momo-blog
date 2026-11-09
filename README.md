@@ -65,6 +65,12 @@ npm start
 
 登录后点击「编辑页面」，修改内容或更换主题，再点「保存修改」。首次启动自带可替换的示例内容，个人数据保存在 `data/`，不会进入 Git。
 
+## GitHub Pages 只读演示
+
+推送 `main` 分支即可自动构建一个只读演示站（`.github/workflows/pages.yml`），首次需要在仓库 **Settings → Pages** 把 Source 选为 **GitHub Actions**。演示站没有服务端，因此登录、编辑、上传、留言、访客定位等依赖接口的功能不可用，其余页面、示例照片与音乐、天气卡片均按真实界面呈现。
+
+本地预览同样命令：`npm run build:pages`，产物在 `dist/client`。默认发布路径按仓库名自动推导（项目站点为 `/<仓库名>/`），可在构建时用 `PAGES_BASE` 覆盖。
+
 ## Railway 部署
 
 从 GitHub 导入项目，构建命令使用 `npm run build`，启动命令使用 `npm start`。

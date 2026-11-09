@@ -2,6 +2,17 @@
 
 记录影响使用体验与数据兼容性的变化。
 
+## 2026-11-05
+
+### 新增
+
+- GitHub Pages 只读演示站：`npm run build:pages` 会用一个临时数据目录启动真实服务端，导出示例内容与素材快照，再按子路径构建前端；`.github/workflows/pages.yml` 在推送到 `main` 时自动发布，首次需在仓库 Settings → Pages 选择 GitHub Actions。
+- 前端支持部署在子路径（Vite `base` / `PAGES_BASE`）：站内路由、`href`、深浅链接回退与示例素材地址均按部署前缀解析，看板娘资源改为按脚本自身地址推导前缀；自托管仍保持根路径。
+
+### 调整
+
+- Open-Meteo 响应解析抽到 `shared/weather.ts` 的 `parseWeatherPayload()`，服务端与静态演示站共用同一份实现，避免两份解析逻辑漂移。
+
 ## 2026-10-23
 
 ### 新增
