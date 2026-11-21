@@ -9078,6 +9078,594 @@ body.lab-mode .music-fab {
   background: linear-gradient(135deg, #fafbff, #e9ecf6);
   border-radius: 12px;
 }
+/* CursorGrid: transparent WebGL grid over a dark stage; content overlay sits above the canvas */
+.lab-preview__frame .cursor-grid {
+  height: min(72vh, 540px);
+  width: 100%;
+  background: #070a12;
+  border-radius: 12px;
+}
+.cursor-grid__demo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  pointer-events: none;
+  text-align: center;
+  font-family: "Space Grotesk", sans-serif;
+}
+.cursor-grid__demo-kicker {
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  color: rgba(138, 180, 255, 0.75);
+}
+.cursor-grid__demo-title {
+  font-size: clamp(1.5rem, 5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #eaf0ff;
+  text-shadow: 0 0 24px rgba(138, 180, 255, 0.35);
+}
+.cursor-grid__demo-sub {
+  font-size: 0.8rem;
+  color: rgba(234, 240, 255, 0.62);
+}
+/* SwarmCursor: instanced particles over a dark stage; demo buttons are the
+   default `targets` so hovering them makes the swarm flow around their outline */
+.lab-preview__frame .swarm-cursor {
+  height: min(72vh, 540px);
+  width: 100%;
+  background: radial-gradient(120% 120% at 50% 40%, #101524 0%, #070a12 70%);
+  border-radius: 12px;
+}
+.swarm-cursor__demo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  pointer-events: none;
+  text-align: center;
+  font-family: "Space Grotesk", sans-serif;
+}
+.swarm-cursor__demo-kicker {
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  color: rgba(138, 180, 255, 0.75);
+}
+.swarm-cursor__demo-title {
+  font-size: clamp(1.5rem, 5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #eaf0ff;
+  text-shadow: 0 0 24px rgba(138, 180, 255, 0.35);
+}
+.swarm-cursor__demo-sub {
+  font-size: 0.8rem;
+  color: rgba(234, 240, 255, 0.62);
+}
+.swarm-cursor__demo-actions {
+  display: flex;
+  gap: 0.9rem;
+  margin-top: 0.8rem;
+  pointer-events: auto;
+}
+.swarm-cursor__demo-btn {
+  padding: 0.55rem 1.4rem;
+  border: 1px solid rgba(138, 180, 255, 0.5);
+  border-radius: 999px;
+  background: rgba(138, 180, 255, 0.08);
+  color: #eaf0ff;
+  font: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.swarm-cursor__demo-btn:hover {
+  background: rgba(138, 180, 255, 0.2);
+  border-color: rgba(138, 180, 255, 0.9);
+}
+/* AnimatedContent: GSAP entrance container — root div carries className and its
+   inline visibility is flipped to visible by the component on mount. */
+.lab-preview__frame .animated-content-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: min(62vh, 460px);
+  width: 100%;
+  border-radius: 12px;
+  background: radial-gradient(120% 120% at 50% 30%, #131a2e 0%, #080b14 72%);
+}
+.animated-content__demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 2.2rem 2.6rem;
+  border: 1px solid rgba(138, 180, 255, 0.18);
+  border-radius: 16px;
+  background: rgba(138, 180, 255, 0.04);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  font-family: "Space Grotesk", sans-serif;
+  text-align: center;
+}
+.animated-content__demo-kicker {
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  color: rgba(138, 180, 255, 0.75);
+}
+.animated-content__demo-title {
+  font-size: clamp(1.4rem, 4.6vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #eaf0ff;
+}
+.animated-content__demo-sub {
+  font-size: 0.82rem;
+  color: rgba(234, 240, 255, 0.6);
+}
+.animated-content__demo-chips {
+  display: flex;
+  gap: 0.55rem;
+  margin-top: 0.4rem;
+}
+.animated-content__demo-chips span {
+  padding: 0.3rem 0.85rem;
+  border: 1px solid rgba(138, 180, 255, 0.35);
+  border-radius: 999px;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: rgba(234, 240, 255, 0.85);
+  background: rgba(138, 180, 255, 0.08);
+}
+/* FadeContent: GSAP fade container. Root div carries className; its direct
+   children are the stagger targets (raised `stagger` animates them one by one). */
+.lab-preview__frame .fade-content-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  height: min(62vh, 460px);
+  width: 100%;
+  padding: 2rem;
+  border-radius: 12px;
+  background: radial-gradient(120% 120% at 50% 32%, #16203a 0%, #080b16 72%);
+  font-family: "Space Grotesk", sans-serif;
+  text-align: center;
+}
+.fade-content__demo-kicker {
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  color: rgba(138, 180, 255, 0.78);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+.fade-content__demo-title {
+  font-size: clamp(1.5rem, 4.8vw, 2.35rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #eaf0ff;
+  text-shadow: 0 4px 22px rgba(0, 0, 0, 0.55);
+}
+.fade-content__demo-sub {
+  font-size: 0.84rem;
+  color: rgba(234, 240, 255, 0.62);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+.fade-content__demo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem;
+  margin-top: 0.35rem;
+}
+.fade-content__demo-chips span {
+  padding: 0.3rem 0.9rem;
+  border: 1px solid rgba(138, 180, 255, 0.35);
+  border-radius: 999px;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: rgba(234, 240, 255, 0.88);
+  background: rgba(138, 180, 255, 0.08);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+/* ElectricBorder: canvas expands 64px beyond the container on every side, so
+   size the wrapped card smaller than the frame and leave room to avoid clipping
+   by .lab-preview's overflow:hidden. */
+.lab-preview__frame .electric-border {
+  width: min(320px, 68%);
+  height: min(340px, 66%);
+  background: radial-gradient(120% 120% at 50% 25%, #102033 0%, #070d17 72%);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
+}
+.electric-border__demo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
+  border-radius: inherit;
+  font-family: "Space Grotesk", sans-serif;
+  text-align: center;
+}
+.electric-border__demo-kicker {
+  font-size: 0.6rem;
+  letter-spacing: 0.28em;
+  color: rgba(125, 249, 255, 0.75);
+}
+.electric-border__demo-title {
+  font-size: clamp(1.5rem, 5vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #eafaff;
+  text-shadow: 0 2px 18px rgba(125, 249, 255, 0.25);
+}
+.electric-border__demo-sub {
+  font-size: 0.78rem;
+  color: rgba(234, 250, 255, 0.6);
+}
+/* OrbitImages: width:100% + computed aspect-ratio; frame sizes the stage and
+   the carousel scales its SVG viewBox to fit. */
+.lab-preview__frame .orbit-container {
+  width: 100%;
+  max-width: 640px;
+  padding: 1rem;
+}
+.orbit-center-title {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #eaf6ff;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.55), 0 0 24px rgba(125, 249, 255, 0.25);
+}
+/* LogoLoop: self-styled marquee; the frame just provides a stage + vertical centering. */
+.lab-preview__frame .logoloop {
+  width: 100%;
+  background: radial-gradient(120% 140% at 50% 50%, #121a2b 0%, #080b14 75%);
+  border-radius: 12px;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.35);
+}
+/* TargetCursor: body-level portal cursor, scoped to the stage below. */
+.lab-preview__frame .target-cursor-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2rem;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  padding: 2rem;
+  border-radius: 12px;
+  background: radial-gradient(120% 120% at 50% 40%, #16203a 0%, #0a0e1a 70%);
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.45);
+  font-family: "Space Grotesk", sans-serif;
+}
+.target-cursor-stage__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+.target-cursor-stage__kicker {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: rgba(125, 249, 255, 0.7);
+}
+.target-cursor-stage__title {
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #eafaff;
+  text-shadow: 0 2px 18px rgba(125, 249, 255, 0.25);
+}
+.target-cursor-stage__targets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+}
+.target-cursor-stage__pill,
+.target-cursor-stage__card,
+.target-cursor-stage__round {
+  border: none;
+  color: #07121f;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.target-cursor-stage__pill {
+  padding: 0.8rem 1.9rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #7df9ff, #7ab4ff);
+  box-shadow: 0 8px 28px rgba(125, 249, 255, 0.22);
+}
+.target-cursor-stage__card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 128px;
+  height: 84px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  background: linear-gradient(135deg, #ffcf8a, #ff8ac4);
+  box-shadow: 0 8px 28px rgba(255, 138, 196, 0.22);
+}
+.target-cursor-stage__round {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  background: linear-gradient(135deg, #c9a8ff, #8a9dff);
+  box-shadow: 0 8px 28px rgba(160, 150, 255, 0.22);
+}
+.target-cursor-stage__pill:hover,
+.target-cursor-stage__card:hover,
+.target-cursor-stage__round:hover {
+  transform: translateY(-2px);
+}
+/* GhostCursor: absolute inset:0 canvas, screen-blended smoke needs a dark stage. */
+.lab-preview__frame .ghost-cursor {
+  height: min(72vh, 540px);
+  width: 100%;
+  background: #0a0810;
+  border-radius: 12px;
+}
+/* ClickSpark: bursts are drawn on canvases layered inside the stage. The
+   wrapper fills the preview frame; the dark stage keeps bright sparks legible. */
+.lab-preview__frame .click-spark-stage-wrap {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+}
+.lab-preview__frame .click-spark-stage-wrap > div {
+  width: 100%;
+  height: 100%;
+}
+.click-spark-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  border-radius: 12px;
+  background: radial-gradient(120% 120% at 50% 38%, #1a1830 0%, #0a0a14 72%);
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.5);
+  font-family: "Space Grotesk", sans-serif;
+  text-align: center;
+  user-select: none;
+}
+.click-spark-stage__kicker {
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  color: rgba(125, 249, 255, 0.7);
+}
+.click-spark-stage__title {
+  margin: 0;
+  font-size: clamp(1.7rem, 6vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f4f2ff;
+  text-shadow: 0 2px 20px rgba(179, 136, 255, 0.3);
+}
+.click-spark-stage__desc {
+  margin: 0;
+  font-size: clamp(0.75rem, 2.4vw, 0.9rem);
+  color: rgba(234, 232, 255, 0.66);
+}
+.click-spark-stage__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin-top: 0.4rem;
+}
+.click-spark-stage__btn {
+  padding: 0.72rem 1.8rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7df9ff, #b388ff);
+  color: #0a0a14;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(125, 249, 255, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.click-spark-stage__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px rgba(179, 136, 255, 0.3);
+}
+.click-spark-stage__badge {
+  padding: 0.5rem 0.9rem;
+  border: 1px solid rgba(179, 136, 255, 0.35);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: rgba(220, 210, 255, 0.8);
+  background: rgba(179, 136, 255, 0.08);
+}
+/* Magnet: three targets share one window pointer + arbitration. The stage is
+   padded so pulled targets have room to travel without hitting the frame edge;
+   the active wrapper (data-magnet-active) gets a highlight ring. */
+.lab-preview__frame .magnet-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.4rem;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  padding: 3rem 3.5rem;
+  border-radius: 12px;
+  background: radial-gradient(120% 120% at 50% 40%, #142036 0%, #0a0e1a 72%);
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.45);
+  font-family: "Space Grotesk", sans-serif;
+  text-align: center;
+}
+.magnet-stage__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.magnet-stage__kicker {
+  font-size: 0.62rem;
+  letter-spacing: 0.26em;
+  color: rgba(125, 249, 255, 0.65);
+}
+.magnet-stage__title {
+  font-size: clamp(1.1rem, 3.6vw, 1.5rem);
+  font-weight: 600;
+  color: #eafaff;
+}
+.magnet-stage__items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2.6rem;
+}
+.magnet-stage__pill,
+.magnet-stage__card,
+.magnet-stage__round {
+  border: none;
+  color: #07121f;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: box-shadow 0.25s ease, filter 0.25s ease;
+}
+.magnet-stage__pill {
+  padding: 0.8rem 2rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  background: linear-gradient(135deg, #7df9ff, #7ab4ff);
+  box-shadow: 0 8px 28px rgba(125, 249, 255, 0.2);
+}
+.magnet-stage__card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 128px;
+  height: 84px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  background: linear-gradient(135deg, #ffcf8a, #ff8ac4);
+  box-shadow: 0 8px 28px rgba(255, 138, 196, 0.2);
+}
+.magnet-stage__round {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  background: linear-gradient(135deg, #c9a8ff, #8a9dff);
+  box-shadow: 0 8px 28px rgba(160, 150, 255, 0.22);
+}
+.magnet-stage__wrap[data-magnet-active] .magnet-stage__pill,
+.magnet-stage__wrap[data-magnet-active] .magnet-stage__card,
+.magnet-stage__wrap[data-magnet-active] .magnet-stage__round {
+  filter: brightness(1.12);
+}
+.magnet-stage__wrap[data-magnet-active] .magnet-stage__pill {
+  box-shadow: 0 10px 36px rgba(125, 249, 255, 0.5);
+}
+.magnet-stage__wrap[data-magnet-active] .magnet-stage__card {
+  box-shadow: 0 10px 36px rgba(255, 138, 196, 0.48);
+}
+.magnet-stage__wrap[data-magnet-active] .magnet-stage__round {
+  box-shadow: 0 10px 36px rgba(160, 150, 255, 0.5);
+}
+/* Strands: single-triangle WebGL2 shader, transparent canvas. Give the orb a
+   real box and a dark stage so the refractive glass and rim light read well;
+   the flyout frame is smaller so scale the orb box down there. */
+.lab-preview__frame .strands-container {
+  height: min(72vh, 540px);
+  width: 100%;
+  background: radial-gradient(120% 120% at 50% 45%, #141826 0%, #07080f 72%);
+  border-radius: 12px;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.35);
+}
+/* StickerPeel: the component is absolutely positioned against its parent and
+   reads that parent's clientWidth/Height. The stage supplies a sized relative
+   box with a light surface so the glossy sticker + shadow read clearly. */
+.lab-preview__frame .sticker-peel-stage {
+  position: relative;
+  width: 100%;
+  height: min(72vh, 540px);
+  min-height: 320px;
+  border-radius: 12px;
+  background: radial-gradient(120% 120% at 50% 40%, #e9edf5 0%, #c9d2e2 78%);
+  box-shadow: inset 0 0 70px rgba(80, 95, 130, 0.18);
+  overflow: hidden;
+}
+/* PixelTrail renders a transparent, absolutely-positioned WebGL canvas; the
+   stage supplies a dark sized box so the emissive pixel trail reads clearly. */
+.lab-preview__frame .pixel-trail-stage {
+  position: relative;
+  width: 100%;
+  height: min(72vh, 540px);
+  min-height: 320px;
+  border-radius: 12px;
+  background: radial-gradient(130% 130% at 50% 45%, #0d1220 0%, #05060c 78%);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+/* Cubes renders a transparent, absolutely-positioned WebGL2 canvas; the stage
+   supplies a dark sized box so the white-edged cubes read clearly. */
+.lab-preview__frame .cubes-stage {
+  position: relative;
+  width: 100%;
+  height: min(72vh, 540px);
+  min-height: 320px;
+  border-radius: 12px;
+  background: radial-gradient(130% 130% at 50% 45%, #14121c 0%, #08070d 78%);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+/* MetallicPaint renders a transparent WebGL2 canvas with a liquid-metal word;
+   a dark stage lets the silver/chromatic sheen read clearly. */
+.lab-preview__frame .metallic-paint-stage {
+  position: relative;
+  width: 100%;
+  height: min(72vh, 540px);
+  min-height: 320px;
+  border-radius: 12px;
+  background: radial-gradient(130% 130% at 50% 45%, #181821 0%, #0a0a10 78%);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
 .lab-preview__hint {
   position: absolute;
   left: 14px;

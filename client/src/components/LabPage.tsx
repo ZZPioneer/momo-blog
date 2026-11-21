@@ -83,6 +83,38 @@ import RippleDistortion from "./RippleDistortion";
 import rippleDistortionSrc from "./RippleDistortion.tsx?raw";
 import ElasticMesh from "./ElasticMesh";
 import elasticMeshSrc from "./ElasticMesh.tsx?raw";
+import CursorGrid from "./CursorGrid";
+import cursorGridSrc from "./CursorGrid.tsx?raw";
+import SwarmCursor from "./SwarmCursor";
+import swarmCursorSrc from "./SwarmCursor.tsx?raw";
+import AnimatedContent from "./AnimatedContent";
+import animatedContentSrc from "./AnimatedContent.tsx?raw";
+import FadeContent from "./FadeContent";
+import fadeContentSrc from "./FadeContent.tsx?raw";
+import ElectricBorder from "./ElectricBorder";
+import electricBorderSrc from "./ElectricBorder.tsx?raw";
+import OrbitImages from "./OrbitImages";
+import orbitImagesSrc from "./OrbitImages.tsx?raw";
+import LogoLoop from "./LogoLoop";
+import logoLoopSrc from "./LogoLoop.tsx?raw";
+import TargetCursor, { type TargetCursorProps } from "./TargetCursor";
+import targetCursorSrc from "./TargetCursor.tsx?raw";
+import GhostCursor from "./GhostCursor";
+import ghostCursorSrc from "./GhostCursor.tsx?raw";
+import ClickSpark, { type ClickSparkProps, type ClickSparkHandle } from "./ClickSpark";
+import clickSparkSrc from "./ClickSpark.tsx?raw";
+import Magnet, { type MagnetProps } from "./Magnet";
+import magnetSrc from "./Magnet.tsx?raw";
+import Strands from "./Strands";
+import strandsSrc from "./Strands.tsx?raw";
+import StickerPeel, { type StickerPeelProps } from "./StickerPeel";
+import stickerPeelSrc from "./StickerPeel.tsx?raw";
+import PixelTrail, { type PixelTrailProps } from "./PixelTrail";
+import pixelTrailSrc from "./PixelTrail.tsx?raw";
+import Cubes from "./Cubes";
+import cubesSrc from "./Cubes.tsx?raw";
+import MetallicPaint from "./MetallicPaint";
+import metallicPaintSrc from "./MetallicPaint.tsx?raw";
 import { CodeBlock } from "./CodeBlock";
 
 /** Keeps a single crashing WebGL component from white-screening the whole lab. */
@@ -2151,6 +2183,1081 @@ const ELASTIC_CONTROLS: ControlDef[] = [
   },
 ];
 
+// ── CursorGrid parameter set ────────────────────────────────────────────────
+// Native WebGL2 cursor-reactive grid. `children` demo content is pinned via
+// previewProps; colors default to a cool-blue palette that reads on the dark stage.
+const CURSORGRID_CONTROLS: ControlDef[] = [
+  // 网格 / Grid
+  { type: "range", group: "网格", label: "单元格", path: "cellSize", min: 16, max: 160, step: 2, default: 60, unit: "px" },
+  {
+    type: "select", group: "网格", label: "样式", path: "gridStyle", default: "lines",
+    options: [
+      { label: "实线", value: "lines" },
+      { label: "虚线", value: "dashed" },
+      { label: "圆点", value: "dots" },
+      { label: "十字", value: "crosses" },
+    ],
+  },
+  { type: "range", group: "网格", label: "线宽", path: "lineWidth", min: 0.5, max: 4, step: 0.25, default: 1, unit: "px" },
+  { type: "range", group: "网格", label: "单元圆角", path: "cellRadius", min: 0, max: 30, step: 1, default: 0, unit: "px" },
+  { type: "range", group: "网格", label: "单元间隙", path: "cellGap", min: 0, max: 20, step: 1, default: 0, unit: "px" },
+  { type: "range", group: "网格", label: "网格透明度", path: "gridOpacity", min: 0, max: 1, step: 0.02, default: 0.08 },
+  { type: "range", group: "网格", label: "边缘淡出", path: "edgeFade", min: 0, max: 0.5, step: 0.02, default: 0.2 },
+  // 光效 / Glow
+  { type: "color", group: "光效", label: "点亮色", path: "color", default: "#8ab4ff" },
+  { type: "color", group: "光效", label: "网格色", path: "gridColor", default: "#2a3550" },
+  { type: "range", group: "光效", label: "影响半径", path: "radius", min: 40, max: 360, step: 10, default: 140, unit: "px" },
+  {
+    type: "select", group: "光效", label: "衰减", path: "falloff", default: "smooth",
+    options: [
+      { label: "线性", value: "linear" },
+      { label: "平滑", value: "smooth" },
+      { label: "陡峭", value: "sharp" },
+    ],
+  },
+  { type: "range", group: "光效", label: "聚光", path: "spotlight", min: 0, max: 1, step: 0.05, default: 0.6 },
+  { type: "range", group: "光效", label: "最大不透明度", path: "maxOpacity", min: 0, max: 1, step: 0.05, default: 1 },
+  { type: "range", group: "光效", label: "填充透明度", path: "fillOpacity", min: 0, max: 0.4, step: 0.02, default: 0.06 },
+  // 交互 / Interaction
+  {
+    type: "select", group: "交互", label: "高亮模式", path: "highlight", default: "area",
+    options: [
+      { label: "区域", value: "area" },
+      { label: "单元格", value: "cell" },
+    ],
+  },
+  { type: "range", group: "交互", label: "保持时间", path: "holdTime", min: 0, max: 2000, step: 50, default: 400, unit: "ms" },
+  { type: "range", group: "交互", label: "淡出时长", path: "fadeDuration", min: 100, max: 3000, step: 50, default: 800, unit: "ms" },
+  { type: "toggle", group: "交互", label: "点击涟漪", path: "clickPulse", default: true },
+  { type: "range", group: "交互", label: "涟漪速度", path: "pulseSpeed", min: 100, max: 2000, step: 50, default: 600 },
+  { type: "range", group: "交互", label: "环境光", path: "ambient", min: 0, max: 1, step: 0.05, default: 0 },
+  // 外观 / Appearance
+  { type: "toggle", group: "外观", label: "入场动画", path: "intro", default: true },
+  { type: "toggle", group: "外观", label: "亮色模式", path: "lightMode", default: false },
+];
+
+// ── SwarmCursor parameter set ───────────────────────────────────────────────
+// Native WebGL2 cursor swarm. `children` demo content is pinned via
+// previewProps; the default `targets` selector catches the demo buttons so
+// particles gather around them on hover.
+const SWARMCURSOR_CONTROLS: ControlDef[] = [
+  // 粒子 / Particles
+  { type: "range", group: "粒子", label: "数量", path: "count", min: 100, max: 2000, step: 50, default: 800 },
+  { type: "range", group: "粒子", label: "尺寸", path: "size", min: 0.5, max: 10, step: 0.1, default: 2.6, unit: "px" },
+  {
+    type: "select", group: "粒子", label: "形状", path: "shape", default: "dot",
+    options: [
+      { label: "圆点", value: "dot" },
+      { label: "拖尾", value: "streak" },
+      { label: "方块", value: "square" },
+    ],
+  },
+  { type: "color", group: "粒子", label: "主色", path: "color", default: "#8ab4ff" },
+  { type: "color", group: "粒子", label: "强调色", path: "accentColor", default: "#ff8ac4" },
+  { type: "range", group: "粒子", label: "聚拢半径", path: "spread", min: 20, max: 300, step: 10, default: 90, unit: "px" },
+  // 运动 / Motion
+  { type: "range", group: "运动", label: "速度", path: "speed", min: 0, max: 4, step: 0.1, default: 1 },
+  { type: "range", group: "运动", label: "漩涡", path: "swirl", min: 0, max: 1, step: 0.05, default: 0.6 },
+  { type: "range", group: "运动", label: "跟随", path: "tail", min: 0, max: 1, step: 0.05, default: 0.5 },
+  { type: "range", group: "运动", label: "拖影", path: "trail", min: 0, max: 3, step: 0.1, default: 0.6 },
+  { type: "range", group: "运动", label: "游荡", path: "wander", min: 0, max: 2, step: 0.1, default: 0.5 },
+  { type: "range", group: "运动", label: "景深", path: "depth", min: 0, max: 1, step: 0.05, default: 0.7 },
+  // 交互 / Interaction
+  {
+    type: "select", group: "交互", label: "待机", path: "idle", default: "roam",
+    options: [
+      { label: "漫游", value: "roam" },
+      { label: "聚拢", value: "gather" },
+      { label: "隐藏", value: "hide" },
+    ],
+  },
+  {
+    type: "select", group: "交互", label: "点击效果", path: "clickEffect", default: "burst",
+    options: [
+      { label: "爆发", value: "burst" },
+      { label: "脉冲", value: "pulse" },
+      { label: "无", value: "none" },
+    ],
+  },
+  { type: "toggle", group: "交互", label: "隐藏光标", path: "hideCursor", default: false },
+  { type: "toggle", group: "交互", label: "启用", path: "enabled", default: true },
+  // 外观 / Appearance
+  { type: "toggle", group: "外观", label: "入场动画", path: "intro", default: true },
+  { type: "toggle", group: "外观", label: "亮色模式", path: "lightMode", default: false },
+];
+
+// ── AnimatedContent parameter set ───────────────────────────────────────────
+// GSAP + ScrollTrigger entrance animation. `trigger` defaults to "mount" so the
+// preview plays on load (no scroll container in the lab); `children` demo card
+// is pinned via previewProps.
+const ANIMATEDCONTENT_CONTROLS: ControlDef[] = [
+  // 入场 / Entrance
+  { type: "range", group: "入场", label: "位移距离", path: "distance", min: 20, max: 300, step: 10, default: 100, unit: "px" },
+  {
+    type: "select", group: "入场", label: "方向", path: "direction", default: "vertical",
+    options: [
+      { label: "垂直", value: "vertical" },
+      { label: "水平", value: "horizontal" },
+    ],
+  },
+  { type: "toggle", group: "入场", label: "反向", path: "reverse", default: false },
+  { type: "range", group: "入场", label: "时长", path: "duration", min: 0.1, max: 3, step: 0.1, default: 0.8, unit: "s" },
+  {
+    type: "select", group: "入场", label: "缓动", path: "ease", default: "power3.out",
+    options: [
+      { label: "power3.out", value: "power3.out" },
+      { label: "power2.out", value: "power2.out" },
+      { label: "back.out", value: "back.out(1.7)" },
+      { label: "elastic.out", value: "elastic.out(1, 0.3)" },
+      { label: "expo.out", value: "expo.out" },
+      { label: "none", value: "none" },
+    ],
+  },
+  { type: "range", group: "入场", label: "延迟", path: "delay", min: 0, max: 2, step: 0.1, default: 0, unit: "s" },
+  {
+    type: "select", group: "入场", label: "触发", path: "trigger", default: "mount",
+    options: [
+      { label: "挂载", value: "mount" },
+      { label: "滚动", value: "scroll" },
+    ],
+  },
+  { type: "toggle", group: "入场", label: "仅一次", path: "once", default: true },
+  // 变换 / Transform
+  { type: "range", group: "变换", label: "初始透明度", path: "initialOpacity", min: 0, max: 1, step: 0.05, default: 0 },
+  { type: "toggle", group: "变换", label: "动画透明度", path: "animateOpacity", default: true },
+  { type: "range", group: "变换", label: "初始缩放", path: "scale", min: 0.2, max: 2, step: 0.05, default: 1 },
+  { type: "range", group: "变换", label: "模糊", path: "blur", min: 0, max: 20, step: 1, default: 0, unit: "px" },
+  { type: "range", group: "变换", label: "旋转", path: "rotate", min: -180, max: 180, step: 5, default: 0, unit: "°" },
+  { type: "range", group: "变换", label: "倾斜", path: "tilt", min: 0, max: 90, step: 5, default: 0, unit: "°" },
+  // 遮罩 / Reveal
+  {
+    type: "select", group: "遮罩", label: "擦除", path: "wipe", default: "none",
+    options: [
+      { label: "无", value: "none" },
+      { label: "上", value: "up" },
+      { label: "下", value: "down" },
+      { label: "左", value: "left" },
+      { label: "右", value: "right" },
+      { label: "中心", value: "center" },
+    ],
+  },
+  { type: "range", group: "遮罩", label: "错落间隔", path: "stagger", min: 0, max: 0.3, step: 0.01, default: 0, unit: "s" },
+  {
+    type: "select", group: "遮罩", label: "错落起点", path: "staggerFrom", default: "start",
+    options: [
+      { label: "开头", value: "start" },
+      { label: "结尾", value: "end" },
+      { label: "中心", value: "center" },
+      { label: "两端", value: "edges" },
+      { label: "随机", value: "random" },
+    ],
+  },
+  { type: "range", group: "遮罩", label: "滚动阈值", path: "threshold", min: 0, max: 1, step: 0.05, default: 0.1 },
+  // 消失 / Exit
+  { type: "toggle", group: "消失", label: "滚动擦洗", path: "scrub", default: false },
+  { type: "range", group: "消失", label: "消失延迟", path: "disappearAfter", min: 0, max: 5, step: 0.1, default: 0, unit: "s" },
+  { type: "range", group: "消失", label: "消失时长", path: "disappearDuration", min: 0.1, max: 2, step: 0.1, default: 0.5, unit: "s" },
+  {
+    type: "select", group: "消失", label: "消失缓动", path: "disappearEase", default: "power3.in",
+    options: [
+      { label: "power3.in", value: "power3.in" },
+      { label: "power2.in", value: "power2.in" },
+      { label: "back.in", value: "back.in(1.7)" },
+      { label: "none", value: "none" },
+    ],
+  },
+];
+
+// ── FadeContent parameter set ────────────────────────────────────────────────
+// GSAP + ScrollTrigger fade container with six reveal effects (fade / focus /
+// develop / dissolve / mist / pixel). `trigger` defaults to "mount" so the demo
+// plays on preview load; `children` is pinned via previewProps (no text input).
+const FADECONTENT_CONTROLS: ControlDef[] = [
+  // 入场 / Entrance
+  {
+    type: "select", group: "入场", label: "效果", path: "effect", default: "fade",
+    options: [
+      { label: "淡入 · fade", value: "fade" },
+      { label: "聚焦 · focus", value: "focus" },
+      { label: "显影 · develop", value: "develop" },
+      { label: "溶解 · dissolve", value: "dissolve" },
+      { label: "薄雾 · mist", value: "mist" },
+      { label: "像素 · pixel", value: "pixel" },
+    ],
+  },
+  { type: "range", group: "入场", label: "时长", path: "duration", min: 0.1, max: 3, step: 0.1, default: 1, unit: "s" },
+  {
+    type: "select", group: "入场", label: "缓动", path: "ease", default: "power2.out",
+    options: [
+      { label: "power2.out", value: "power2.out" },
+      { label: "power3.out", value: "power3.out" },
+      { label: "back.out", value: "back.out(1.7)" },
+      { label: "elastic.out", value: "elastic.out(1, 0.3)" },
+      { label: "expo.out", value: "expo.out" },
+      { label: "none", value: "none" },
+    ],
+  },
+  { type: "range", group: "入场", label: "延迟", path: "delay", min: 0, max: 2, step: 0.1, default: 0, unit: "s" },
+  {
+    type: "select", group: "入场", label: "触发", path: "trigger", default: "mount",
+    options: [
+      { label: "挂载", value: "mount" },
+      { label: "滚动", value: "scroll" },
+    ],
+  },
+  { type: "toggle", group: "入场", label: "仅一次", path: "once", default: true },
+  // 外观 / Appearance
+  { type: "range", group: "外观", label: "初始透明度", path: "initialOpacity", min: 0, max: 1, step: 0.05, default: 0 },
+  { type: "range", group: "外观", label: "模糊", path: "blur", min: 0, max: 20, step: 1, default: 0, unit: "px" },
+  // 错落 / Stagger
+  { type: "range", group: "错落", label: "错落间隔", path: "stagger", min: 0, max: 0.3, step: 0.01, default: 0, unit: "s" },
+  {
+    type: "select", group: "错落", label: "错落起点", path: "staggerFrom", default: "start",
+    options: [
+      { label: "开头", value: "start" },
+      { label: "结尾", value: "end" },
+      { label: "中心", value: "center" },
+      { label: "两端", value: "edges" },
+      { label: "随机", value: "random" },
+    ],
+  },
+  // 滚动 / Scroll
+  { type: "range", group: "滚动", label: "滚动阈值", path: "threshold", min: 0, max: 1, step: 0.05, default: 0.1 },
+  { type: "toggle", group: "滚动", label: "离场反向", path: "exit", default: false },
+  { type: "range", group: "滚动", label: "滚动擦洗", path: "scrub", min: 0, max: 2, step: 0.1, default: 0, unit: "s" },
+  // 消失 / Exit
+  { type: "range", group: "消失", label: "消失延迟", path: "disappearAfter", min: 0, max: 5, step: 0.1, default: 0, unit: "s" },
+  { type: "range", group: "消失", label: "消失时长", path: "disappearDuration", min: 0.1, max: 2, step: 0.1, default: 0.5, unit: "s" },
+  {
+    type: "select", group: "消失", label: "消失缓动", path: "disappearEase", default: "power2.in",
+    options: [
+      { label: "power2.in", value: "power2.in" },
+      { label: "power3.in", value: "power3.in" },
+      { label: "back.in", value: "back.in(1.7)" },
+      { label: "none", value: "none" },
+    ],
+  },
+];
+
+// ── ElectricBorder parameter set ────────────────────────────────────────────
+// Native WebGL2 electric border that wraps arbitrary children. The canvas is
+// absolutely positioned around the content box; previewProps pins the demo card
+// as `children` (no text-input control type exists).
+const ELECTRICBORDER_CONTROLS: ControlDef[] = [
+  // 颜色 / Color
+  { type: "color", group: "颜色", label: "主色", path: "color", default: "#7df9ff" },
+  { type: "color", group: "颜色", label: "辉光色", path: "glowColor", default: "#7df9ff" },
+  {
+    type: "select", group: "颜色", label: "主题", path: "theme", default: "dark",
+    options: [
+      { label: "暗色", value: "dark" },
+      { label: "亮色", value: "light" },
+    ],
+  },
+  // 光线 / Filaments
+  { type: "range", group: "光线", label: "速度", path: "speed", min: 0, max: 6, step: 0.1, default: 1 },
+  { type: "range", group: "光线", label: "混沌", path: "chaos", min: 0, max: 2, step: 0.05, default: 0.5 },
+  { type: "range", group: "光线", label: "扩散", path: "spread", min: 0, max: 2, step: 0.05, default: 0.6 },
+  { type: "range", group: "光线", label: "粗细", path: "thickness", min: 0.25, max: 4, step: 0.05, default: 1.5 },
+  { type: "range", group: "光线", label: "丝数", path: "strands", min: 1, max: 6, step: 1, default: 3 },
+  { type: "range", group: "光线", label: "辉光", path: "glow", min: 0, max: 3, step: 0.05, default: 0.6 },
+  { type: "range", group: "光线", label: "强度", path: "intensity", min: 0, max: 3, step: 0.05, default: 0.8 },
+  { type: "range", group: "光线", label: "弧光", path: "arcs", min: 0, max: 4, step: 1, default: 1 },
+  { type: "range", group: "光线", label: "闪烁", path: "flicker", min: 0, max: 1, step: 0.05, default: 0.5 },
+  // 边框 / Frame
+  { type: "range", group: "边框", label: "圆角", path: "borderRadius", min: 0, max: 80, step: 1, default: 24, unit: "px" },
+  { type: "range", group: "边框", label: "外扩", path: "offset", min: -20, max: 40, step: 1, default: 0, unit: "px" },
+  // 交互 / Interaction
+  { type: "toggle", group: "交互", label: "启用", path: "active", default: true },
+  { type: "toggle", group: "交互", label: "入场动画", path: "intro", default: true },
+  { type: "toggle", group: "交互", label: "可交互", path: "interactive", default: true },
+  { type: "range", group: "交互", label: "光标半径", path: "cursorRadius", min: 20, max: 300, step: 5, default: 90, unit: "px" },
+];
+
+// ── OrbitImages local assets ─────────────────────────────────────────────────
+// The upstream demo uses picsum.photos (external, fails offline in the lab).
+// Generate six grayscale SVG data-URIs so the preview is fully self-contained.
+const ORBIT_GRAYS = ["#8a8a8a", "#5f6b73", "#767676", "#4a4f55", "#9aa0a6", "#6b7280"];
+const ORBIT_IMAGES = ORBIT_GRAYS.map((base, i) => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><rect width="300" height="300" fill="${base}"/><circle cx="150" cy="126" r="52" fill="rgba(255,255,255,0.12)"/><path d="M0 300 L96 174 L168 248 L232 188 L300 260 L300 300 Z" fill="rgba(0,0,0,0.18)"/><text x="150" y="82" font-family="Arial,sans-serif" font-size="40" font-weight="700" fill="rgba(255,255,255,0.78)" text-anchor="middle">${String(i + 1).padStart(2, "0")}</text></svg>`;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+});
+
+// ── OrbitImages parameter set ────────────────────────────────────────────────
+// SVG-path image carousel: images + centerContent are ReactNode/arrays with no
+// matching control type, so they are pinned via previewProps.
+const ORBITIMAGES_CONTROLS: ControlDef[] = [
+  // 轨道 / Orbit
+  {
+    type: "select", group: "轨道", label: "形状", path: "shape", default: "ellipse",
+    options: [
+      { label: "椭圆", value: "ellipse" },
+      { label: "圆形", value: "circle" },
+      { label: "矩形", value: "rectangle" },
+      { label: "三角形", value: "triangle" },
+      { label: "星形", value: "star" },
+      { label: "心形", value: "heart" },
+      { label: "无限", value: "infinity" },
+      { label: "波浪", value: "wave" },
+    ],
+  },
+  { type: "range", group: "轨道", label: "基准宽度", path: "baseWidth", min: 600, max: 2000, step: 50, default: 1400, unit: "px" },
+  { type: "range", group: "轨道", label: "横半径", path: "radiusX", min: 100, max: 900, step: 10, default: 340, unit: "px" },
+  { type: "range", group: "轨道", label: "纵半径", path: "radiusY", min: 40, max: 500, step: 10, default: 80, unit: "px" },
+  { type: "range", group: "轨道", label: "半径", path: "radius", min: 80, max: 600, step: 10, default: 160, unit: "px" },
+  { type: "range", group: "轨道", label: "旋转", path: "rotation", min: -45, max: 45, step: 1, default: -8, unit: "°" },
+  { type: "range", group: "轨道", label: "星角数", path: "starPoints", min: 3, max: 12, step: 1, default: 5 },
+  { type: "range", group: "轨道", label: "星内比", path: "starInnerRatio", min: 0.2, max: 0.9, step: 0.05, default: 0.5 },
+  // 图片 / Items
+  { type: "range", group: "图片", label: "尺寸", path: "itemSize", min: 30, max: 180, step: 2, default: 90, unit: "px" },
+  { type: "range", group: "图片", label: "圆角", path: "itemRadius", min: 0, max: 50, step: 1, default: 14, unit: "px" },
+  { type: "range", group: "图片", label: "阴影", path: "shadow", min: 0, max: 1, step: 0.05, default: 0.3 },
+  { type: "toggle", group: "图片", label: "铺满轨道", path: "fill", default: true },
+  { type: "toggle", group: "图片", label: "沿路径朝向", path: "alignToPath", default: false },
+  // 运动 / Motion
+  { type: "range", group: "运动", label: "周期", path: "duration", min: 4, max: 90, step: 1, default: 30, unit: "s" },
+  {
+    type: "select", group: "运动", label: "方向", path: "direction", default: "normal",
+    options: [
+      { label: "正向", value: "normal" },
+      { label: "反向", value: "reverse" },
+    ],
+  },
+  {
+    type: "select", group: "运动", label: "缓动", path: "easing", default: "linear",
+    options: [
+      { label: "线性", value: "linear" },
+      { label: "渐入", value: "easeIn" },
+      { label: "渐出", value: "easeOut" },
+      { label: "渐入渐出", value: "easeInOut" },
+    ],
+  },
+  { type: "range", group: "运动", label: "纵深", path: "depth", min: 0, max: 1, step: 0.05, default: 0.6 },
+  { type: "toggle", group: "运动", label: "暂停", path: "paused", default: false },
+  { type: "toggle", group: "运动", label: "入场动画", path: "intro", default: true },
+  // 路径 / Path
+  { type: "toggle", group: "路径", label: "显示路径", path: "showPath", default: true },
+  { type: "color", group: "路径", label: "路径颜色", path: "pathColor", default: "#7df9ff" },
+  { type: "range", group: "路径", label: "线宽", path: "pathWidth", min: 0.5, max: 6, step: 0.5, default: 2, unit: "px" },
+  { type: "range", group: "路径", label: "虚线", path: "pathDash", min: 0, max: 40, step: 1, default: 0, unit: "px" },
+  // 交互 / Interaction
+  { type: "range", group: "交互", label: "悬停缩放", path: "hoverScale", min: 1, max: 1.6, step: 0.02, default: 1.08 },
+  { type: "range", group: "交互", label: "悬停减速", path: "hoverSpeed", min: 0, max: 1, step: 0.05, default: 0.3 },
+  { type: "toggle", group: "交互", label: "可拖拽", path: "draggable", default: true },
+  { type: "toggle", group: "交互", label: "点击置前", path: "clickToFront", default: true },
+];
+
+// ── LogoLoop local assets ────────────────────────────────────────────────────
+// Wordmark-style SVG data-URIs (transparent bg, wide aspect for the img path).
+// `title` is included so the labels/inline/below/hover modes have content.
+const LOGOLOOP_BRANDS = [
+  { name: "ACME", color: "#7df9ff" },
+  { name: "NEXUS", color: "#b388ff" },
+  { name: "PIXEL", color: "#ff8a65" },
+  { name: "ORBIT", color: "#69f0ae" },
+  { name: "VOLT", color: "#ffd740" },
+  { name: "WAVE", color: "#40c4ff" },
+  { name: "NOVA", color: "#f06292" },
+  { name: "FLUX", color: "#aed581" },
+];
+const LOGOLOOP_LOGOS = LOGOLOOP_BRANDS.map(({ name, color }) => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="56" viewBox="0 0 200 56"><circle cx="28" cy="28" r="16" fill="none" stroke="${color}" stroke-width="4"/><circle cx="28" cy="28" r="6" fill="${color}"/><text x="54" y="38" font-family="Arial,sans-serif" font-size="30" font-weight="800" letter-spacing="1" fill="${color}">${name}</text></svg>`;
+  return { src: `data:image/svg+xml,${encodeURIComponent(svg)}`, alt: name, title: name };
+});
+
+// ── LogoLoop parameter set ───────────────────────────────────────────────────
+// Infinite marquee with line/wave/arc/orbit layouts. `logos` (LogoItem[]) has no
+// matching control type — pinned via previewProps to the local SVGs above.
+const LOGOLOOP_CONTROLS: ControlDef[] = [
+  // 循环 / Loop
+  { type: "range", group: "循环", label: "速度", path: "speed", min: 20, max: 400, step: 10, default: 120, unit: "px/s" },
+  {
+    type: "select", group: "循环", label: "方向", path: "direction", default: "left",
+    options: [
+      { label: "向左", value: "left" },
+      { label: "向右", value: "right" },
+      { label: "向上", value: "up" },
+      { label: "向下", value: "down" },
+    ],
+  },
+  { type: "range", group: "循环", label: "高度", path: "logoHeight", min: 14, max: 64, step: 2, default: 34, unit: "px" },
+  { type: "range", group: "循环", label: "间距", path: "gap", min: 8, max: 96, step: 4, default: 48, unit: "px" },
+  { type: "toggle", group: "循环", label: "悬停暂停", path: "pauseOnHover", default: true },
+  { type: "range", group: "循环", label: "悬停速度", path: "hoverSpeed", min: 0, max: 200, step: 10, default: 0, unit: "px/s" },
+  { type: "toggle", group: "循环", label: "步进模式", path: "step", default: false },
+  { type: "toggle", group: "循环", label: "入场动画", path: "intro", default: true },
+  // 布局 / Layout
+  {
+    type: "select", group: "布局", label: "排布", path: "layout", default: "line",
+    options: [
+      { label: "直线", value: "line" },
+      { label: "波浪", value: "wave" },
+      { label: "弧形", value: "arc" },
+      { label: "环绕", value: "orbit" },
+    ],
+  },
+  { type: "range", group: "布局", label: "弯曲", path: "bend", min: -1, max: 1, step: 0.05, default: 0.5 },
+  { type: "range", group: "布局", label: "聚焦", path: "focus", min: 0, max: 1, step: 0.05, default: 0 },
+  { type: "range", group: "布局", label: "放大", path: "magnify", min: 0, max: 1, step: 0.05, default: 0 },
+  { type: "range", group: "布局", label: "倾斜 X", path: "tiltX", min: -60, max: 60, step: 2, default: 0, unit: "°" },
+  { type: "range", group: "布局", label: "倾斜 Y", path: "tiltY", min: -60, max: 60, step: 2, default: 0, unit: "°" },
+  // 外观 / Appearance
+  { type: "toggle", group: "外观", label: "渐隐边缘", path: "fadeOut", default: true },
+  { type: "range", group: "外观", label: "渐隐宽度", path: "fadeOutWidth", min: 0, max: 0.5, step: 0.02, default: 0.12 },
+  { type: "toggle", group: "外观", label: "悬停缩放", path: "scaleOnHover", default: false },
+  { type: "range", group: "外观", label: "灰度", path: "muted", min: 0, max: 1, step: 0.05, default: 0 },
+  {
+    type: "select", group: "外观", label: "标签", path: "labels", default: "none",
+    options: [
+      { label: "无", value: "none" },
+      { label: "同行", value: "inline" },
+      { label: "下方", value: "below" },
+      { label: "悬停", value: "hover" },
+    ],
+  },
+  // 交互 / Interaction
+  { type: "toggle", group: "交互", label: "可拖拽", path: "draggable", default: true },
+  { type: "range", group: "交互", label: "滚动加速", path: "scrollBoost", min: 0, max: 2, step: 0.1, default: 0 },
+];
+
+// ── TargetCursor parameter set ──────────────────────────────────────────────
+// Body-level portal cursor. `container` is wired by TargetCursorLab (a ref
+// holder) so it only activates inside the preview stage; the demo targets are
+// plain DOM nodes carrying `data-cursor-label`.
+const TARGETCURSOR_CONTROLS: ControlDef[] = [
+  // 光标 / Cursor
+  { type: "color", group: "光标", label: "光标颜色", path: "cursorColor", default: "#ffffff" },
+  { type: "color", group: "光标", label: "命中颜色", path: "cursorColorOnTarget", default: "#7df9ff" },
+  { type: "range", group: "光标", label: "基础尺寸", path: "size", min: 12, max: 120, step: 2, default: 36, unit: "px" },
+  { type: "range", group: "光标", label: "边角尺寸", path: "cornerSize", min: 4, max: 48, step: 1, default: 12, unit: "px" },
+  { type: "range", group: "光标", label: "线条粗细", path: "thickness", min: 0.5, max: 8, step: 0.5, default: 3, unit: "px" },
+  { type: "range", group: "光标", label: "外扩间距", path: "padding", min: 0, max: 40, step: 1, default: 6, unit: "px" },
+  { type: "range", group: "光标", label: "中心点", path: "dotSize", min: 0, max: 16, step: 1, default: 4, unit: "px" },
+  // 动画 / Motion
+  { type: "range", group: "动画", label: "旋转周期", path: "spinDuration", min: 0, max: 8, step: 0.2, default: 2, unit: "s" },
+  { type: "range", group: "动画", label: "吸附时长", path: "hoverDuration", min: 0.05, max: 1, step: 0.05, default: 0.2, unit: "s" },
+  // 行为 / Behavior
+  { type: "toggle", group: "行为", label: "视差跟随", path: "parallaxOn", default: true },
+  { type: "toggle", group: "行为", label: "匹配圆角", path: "matchRadius", default: true },
+  { type: "toggle", group: "行为", label: "目标标签", path: "showLabel", default: true },
+  { type: "toggle", group: "行为", label: "点击反馈", path: "clickEffect", default: true },
+  { type: "toggle", group: "行为", label: "隐藏系统光标", path: "hideDefaultCursor", default: true },
+  // 混合 / Blend
+  {
+    type: "select", group: "混合", label: "混合模式", path: "blendMode", default: "difference",
+    options: [
+      { label: "差值", value: "difference" },
+      { label: "排除", value: "exclusion" },
+      { label: "滤色", value: "screen" },
+      { label: "正常", value: "normal" },
+      { label: "叠加", value: "overlay" },
+    ],
+  },
+];
+
+// ── GhostCursor parameter set ───────────────────────────────────────────────
+// Native WebGL2 smoke/ghost cursor. Rendering is confined to its own canvas
+// (absolute inset:0 inside the frame), so no portal scoping is needed. `intro`
+// auto-plays once on load so the preview shows smoke without any pointer input.
+const GHOSTCURSOR_CONTROLS: ControlDef[] = [
+  // 外观 / Appearance
+  { type: "color", group: "外观", label: "烟雾颜色", path: "color", default: "#B497CF" },
+  { type: "range", group: "外观", label: "亮度", path: "brightness", min: 0, max: 3, step: 0.05, default: 1 },
+  { type: "range", group: "外观", label: "尺寸", path: "size", min: 8, max: 200, step: 2, default: 80, unit: "px" },
+  { type: "range", group: "外观", label: "细节", path: "detail", min: 0, max: 1, step: 0.05, default: 1 },
+  { type: "range", group: "外观", label: "颗粒", path: "grainIntensity", min: 0, max: 0.4, step: 0.01, default: 0.05 },
+  // 物理 / Motion
+  { type: "range", group: "物理", label: "拖尾长度", path: "trailLength", min: 1, max: 200, step: 1, default: 50 },
+  { type: "range", group: "物理", label: "惯性", path: "inertia", min: 0, max: 0.99, step: 0.01, default: 0.5 },
+  { type: "range", group: "物理", label: "湍流", path: "turbulence", min: 0, max: 2, step: 0.05, default: 0.5 },
+  { type: "range", group: "物理", label: "漂移", path: "drift", min: 0, max: 2, step: 0.05, default: 0.3 },
+  { type: "range", group: "物理", label: "淡出延迟", path: "fadeDelayMs", min: 0, max: 3000, step: 50, default: 1000, unit: "ms" },
+  { type: "range", group: "物理", label: "淡出时长", path: "fadeDurationMs", min: 100, max: 3000, step: 50, default: 1500, unit: "ms" },
+  // 辉光 / Bloom
+  { type: "range", group: "辉光", label: "辉光强度", path: "bloomStrength", min: 0, max: 2, step: 0.05, default: 0.6 },
+  { type: "range", group: "辉光", label: "辉光半径", path: "bloomRadius", min: 0, max: 3, step: 0.05, default: 1 },
+  { type: "range", group: "辉光", label: "辉光阈值", path: "bloomThreshold", min: 0, max: 0.2, step: 0.005, default: 0.025 },
+  { type: "range", group: "辉光", label: "边缘暗角", path: "edgeIntensity", min: 0, max: 1, step: 0.05, default: 0 },
+  // 交互 / Interaction
+  { type: "toggle", group: "交互", label: "点击喷发", path: "clickPuff", default: true },
+  { type: "toggle", group: "交互", label: "入场演示", path: "intro", default: true },
+  {
+    type: "select", group: "交互", label: "主题", path: "theme", default: "dark",
+    options: [
+      { label: "深色", value: "dark" },
+      { label: "浅色", value: "light" },
+    ],
+  },
+  {
+    type: "select", group: "交互", label: "混合模式", path: "mixBlendMode", default: "screen",
+    options: [
+      { label: "滤色", value: "screen" },
+      { label: "正常", value: "normal" },
+      { label: "差值", value: "difference" },
+      { label: "提亮", value: "lighter" },
+    ],
+  },
+];
+
+// ── ClickSpark parameter set ────────────────────────────────────────────────
+// Canvas overlay sparks on pointer-down. `palette` is a lab-only prop consumed
+// by ClickSparkLab to build the `string[]` form of `sparkColor` (the control
+// system can only emit a single string for colors); "自定义" falls back to the
+// `sparkColor` color control. Canvases are absolutely positioned inside the
+// click-spark stage so no portal scoping is needed.
+const CLICKSPARK_PALETTES: Record<string, string[]> = {
+  rainbow: ["#ff4d6d", "#ffd166", "#06d6a0", "#4cc9f0", "#b388ff"],
+  fire: ["#fff3b0", "#ffb703", "#fb8500", "#ef476f"],
+  ice: ["#e0fbfc", "#98c1d9", "#61dafb", "#5e60ce"],
+  mint: ["#d9ffcf", "#7ee081", "#2ec4b6", "#118ab2"],
+};
+
+const CLICKSPARK_CONTROLS: ControlDef[] = [
+  // 配色 / Color
+  {
+    type: "select", group: "配色", label: "配色方案", path: "palette", default: "rainbow",
+    options: [
+      { label: "霓虹", value: "rainbow" },
+      { label: "烈焰", value: "fire" },
+      { label: "冰雪", value: "ice" },
+      { label: "薄荷", value: "mint" },
+      { label: "自定义", value: "custom" },
+    ],
+  },
+  { type: "color", group: "配色", label: "自定义颜色", path: "sparkColor", default: "#7df9ff" },
+  // 火花 / Sparks
+  { type: "range", group: "火花", label: "火花长度", path: "sparkSize", min: 0, max: 48, step: 1, default: 20, unit: "px" },
+  { type: "range", group: "火花", label: "迸发半径", path: "sparkRadius", min: 0, max: 180, step: 2, default: 74, unit: "px" },
+  { type: "range", group: "火花", label: "火花数量", path: "sparkCount", min: 1, max: 32, step: 1, default: 14 },
+  { type: "range", group: "火花", label: "线条粗细", path: "sparkWidth", min: 0.5, max: 8, step: 0.5, default: 2.5, unit: "px" },
+  { type: "range", group: "火花", label: "额外缩放", path: "extraScale", min: 0.5, max: 3, step: 0.1, default: 1 },
+  {
+    type: "select", group: "火花", label: "形状", path: "shape", default: "line",
+    options: [
+      { label: "线段", value: "line" },
+      { label: "拖尾", value: "streak" },
+      { label: "圆点", value: "dot" },
+      { label: "星芒", value: "star" },
+    ],
+  },
+  { type: "range", group: "火花", label: "辉光", path: "glow", min: 0, max: 1, step: 0.05, default: 0.35 },
+  // 运动 / Motion
+  { type: "range", group: "运动", label: "持续时间", path: "duration", min: 100, max: 1600, step: 50, default: 600, unit: "ms" },
+  {
+    type: "select", group: "运动", label: "缓动", path: "easing", default: "ease-out",
+    options: [
+      { label: "线性", value: "linear" },
+      { label: "渐入", value: "ease-in" },
+      { label: "渐出", value: "ease-out" },
+      { label: "渐入渐出", value: "ease-in-out" },
+      { label: "弹性", value: "spring" },
+    ],
+  },
+  { type: "range", group: "运动", label: "随机度", path: "randomness", min: 0, max: 1, step: 0.05, default: 0.25 },
+  { type: "range", group: "运动", label: "重力", path: "gravity", min: 0, max: 3, step: 0.1, default: 0 },
+  { type: "range", group: "运动", label: "扩散角度", path: "spread", min: 0, max: 360, step: 5, default: 360, unit: "°" },
+  { type: "range", group: "运动", label: "喷射方向", path: "direction", min: 0, max: 360, step: 5, default: 0, unit: "°" },
+  // 行为 / Behavior
+  { type: "toggle", group: "行为", label: "冲击波圆环", path: "ring", default: false },
+  { type: "toggle", group: "行为", label: "自动演示", path: "autoSpark", default: true },
+  { type: "toggle", group: "行为", label: "置于文字后", path: "layer", default: false },
+  { type: "toggle", group: "行为", label: "禁用", path: "disabled", default: false },
+];
+
+/**
+ * ClickSpark paints each burst on a canvas layered inside its own root, so it
+ * needs no portal scoping. This wrapper (a) turns the `palette` select into the
+ * `string[]` form of `sparkColor`, and (b) translates the `layer` toggle into
+ * the component's 'front' | 'back' union. A gentle auto-spark keeps the preview
+ * (and the nav flyout) alive without any pointer input.
+ */
+function ClickSparkLab(props: Record<string, unknown>) {
+  const { palette, sparkColor, autoSpark, layer, ...rest } = props;
+  const stageRef = useRef<HTMLDivElement>(null);
+  const sparkRef = useRef<ClickSparkHandle>(null);
+  const name = String(palette ?? "rainbow");
+  const colors =
+    name === "custom"
+      ? [String(sparkColor ?? "#7df9ff")]
+      : (CLICKSPARK_PALETTES[name] ?? CLICKSPARK_PALETTES.rainbow);
+
+  useEffect(() => {
+    if (!autoSpark) return;
+    let n = 0;
+    const tick = () => {
+      const stage = stageRef.current;
+      if (stage) {
+        const w = stage.clientWidth;
+        const h = stage.clientHeight;
+        const x = w * (0.3 + 0.4 * ((n * 0.37) % 1));
+        const y = h * (0.34 + 0.32 * ((n * 0.61) % 1));
+        sparkRef.current?.spark(x, y);
+      }
+      n += 1;
+    };
+    const id = window.setInterval(tick, 1300);
+    tick();
+    return () => window.clearInterval(id);
+  }, [autoSpark]);
+
+  return (
+    <div ref={stageRef} className="click-spark-stage-wrap">
+      <ClickSpark
+        {...(rest as unknown as ClickSparkProps)}
+        ref={sparkRef}
+        sparkColor={colors}
+        layer={layer ? "back" : "front"}
+      >
+        <div className="click-spark-stage">
+          <span className="click-spark-stage__kicker">INTERACTIVE · 点击特效</span>
+          <h3 className="click-spark-stage__title">ClickSpark</h3>
+          <p className="click-spark-stage__desc">在舞台任意位置点一下，火花从指尖迸发</p>
+          <div className="click-spark-stage__row">
+            <button type="button" className="click-spark-stage__btn">点我一下</button>
+            <span className="click-spark-stage__badge">✦ 4 种形状</span>
+          </div>
+        </div>
+      </ClickSpark>
+    </div>
+  );
+}
+
+// ── Magnet parameter set ─────────────────────────────────────────────────────
+// Every control path matches a MagnetProps key except the three `spring*`
+// paths (lab-only scalars assembled into the `spring` object by MagnetLab) and
+// `maxOffset`, kept as a plain range so the lab always passes a concrete cap.
+// `exclusive` defaults to true so only the nearest of the three demo targets
+// follows the pointer at a time.
+const MAGNET_CONTROLS: ControlDef[] = [
+  // 吸附 / Attraction
+  { type: "range", group: "吸附", label: "感应范围", path: "padding", min: 0, max: 280, step: 5, default: 120, unit: "px" },
+  { type: "range", group: "吸附", label: "磁吸力度", path: "magnetStrength", min: 1, max: 10, step: 0.1, default: 2 },
+  { type: "range", group: "吸附", label: "最大位移", path: "maxOffset", min: 0, max: 200, step: 5, default: 120, unit: "px" },
+  {
+    type: "select", group: "吸附", label: "作用轴", path: "axis", default: "both",
+    options: [
+      { label: "双向", value: "both" },
+      { label: "仅水平", value: "x" },
+      { label: "仅垂直", value: "y" },
+    ],
+  },
+  // 形变 / Transform
+  { type: "range", group: "形变", label: "3D 倾斜", path: "tilt", min: 0, max: 30, step: 1, default: 12, unit: "°" },
+  { type: "range", group: "形变", label: "悬停缩放", path: "scale", min: 1, max: 1.6, step: 0.02, default: 1.08 },
+  // 弹簧 / Spring
+  { type: "range", group: "弹簧", label: "刚度", path: "springStiffness", min: 20, max: 500, step: 10, default: 170 },
+  { type: "range", group: "弹簧", label: "阻尼", path: "springDamping", min: 0, max: 60, step: 1, default: 16 },
+  { type: "range", group: "弹簧", label: "质量", path: "springMass", min: 0.2, max: 5, step: 0.1, default: 1 },
+  // 行为 / Behavior
+  { type: "toggle", group: "行为", label: "独占吸附", path: "exclusive", default: true },
+  { type: "toggle", group: "行为", label: "禁用", path: "disabled", default: false },
+];
+
+/**
+ * Magnet tracks a single window-level pointer and arbitrates between all
+ * registered instances, so the three demo targets can live in one stage and
+ * compete for the pointer. Children (ReactNode) cannot travel through the
+ * control system, so this wrapper supplies them and folds the three lab-only
+ * `spring*` scalars into the `spring` prop Magnet expects. The component marks
+ * the active wrapper with `data-magnet-active`, which the CSS highlights.
+ */
+function MagnetLab(props: Record<string, unknown>) {
+  const { springStiffness, springDamping, springMass, ...rest } = props;
+  const spring = useMemo(
+    () => ({
+      stiffness: Number(springStiffness ?? 170),
+      damping: Number(springDamping ?? 16),
+      mass: Number(springMass ?? 1),
+    }),
+    [springStiffness, springDamping, springMass]
+  );
+  const shared = { ...(rest as unknown as Partial<MagnetProps>), spring };
+  return (
+    <div className="magnet-stage">
+      <div className="magnet-stage__intro">
+        <span className="magnet-stage__kicker">HOVER TO ATTRACT · 磁吸交互</span>
+        <span className="magnet-stage__title">把鼠标移近下方元素</span>
+      </div>
+      <div className="magnet-stage__items">
+        <Magnet {...shared} wrapperClassName="magnet-stage__wrap">
+          <button type="button" className="magnet-stage__pill">悬停我</button>
+        </Magnet>
+        <Magnet {...shared} wrapperClassName="magnet-stage__wrap">
+          <div className="magnet-stage__card">CARD</div>
+        </Magnet>
+        <Magnet {...shared} wrapperClassName="magnet-stage__wrap">
+          <div className="magnet-stage__round">●</div>
+        </Magnet>
+      </div>
+    </div>
+  );
+}
+
+// ── Strands parameter set ────────────────────────────────────────────────────
+// WebGL2 light-strand-in-a-glass-orb shader. `colors` is a string[] with no
+// matching control type, so a lab-only `palette` select is folded into the
+// 7-role color array by StrandsLab (mirrors ClickSpark's palette approach).
+// `level` is intentionally left out: passing a number would override the
+// synthesized `listening` voice envelope, so the demo drives it via `listening`.
+const STRANDS_PALETTES: Record<string, string[]> = {
+  ember: ["#d95b56", "#ba5046", "#ffa24c", "#ffe0b3", "#93f1ff", "#3569fa", "#193d9b"],
+  aurora: ["#0f9b8e", "#19c2a6", "#8ef0c8", "#f4ffe9", "#8ed8ff", "#5a7bff", "#243a9b"],
+  candy: ["#ff4d8d", "#ff7ab6", "#ffc0dd", "#fff0f6", "#b6a4ff", "#7f6bff", "#3b2f9b"],
+  solar: ["#ff3b30", "#ff7a1a", "#ffc42e", "#fff4c2", "#9be7ff", "#3d8bff", "#173a9b"],
+};
+
+const STRANDS_CONTROLS: ControlDef[] = [
+  // 光丝 / Strand
+  { type: "range", group: "光丝", label: "丝带层数", path: "count", min: 1, max: 3, step: 1, default: 3 },
+  { type: "range", group: "光丝", label: "摆幅", path: "amplitude", min: 0.2, max: 2, step: 0.05, default: 1 },
+  { type: "range", group: "光丝", label: "弯曲", path: "waviness", min: 0, max: 3, step: 0.05, default: 1 },
+  { type: "range", group: "光丝", label: "粗细", path: "thickness", min: 0.2, max: 3, step: 0.05, default: 1 },
+  { type: "range", group: "光丝", label: "收束", path: "taper", min: 0.1, max: 2, step: 0.05, default: 1 },
+  { type: "range", group: "光丝", label: "展开", path: "spread", min: 0, max: 2, step: 0.05, default: 1 },
+  { type: "range", group: "光丝", label: "缩放", path: "scale", min: 0.3, max: 2, step: 0.05, default: 1 },
+  // 色彩 / Color
+  {
+    type: "select", group: "色彩", label: "配色", path: "palette", default: "ember",
+    options: [
+      { label: "余烬", value: "ember" },
+      { label: "极光", value: "aurora" },
+      { label: "糖果", value: "candy" },
+      { label: "烈日", value: "solar" },
+    ],
+  },
+  { type: "range", group: "色彩", label: "色相偏移", path: "hueShift", min: -0.5, max: 0.5, step: 0.01, default: 0 },
+  { type: "range", group: "色彩", label: "饱和度", path: "saturation", min: 0, max: 2, step: 0.05, default: 1 },
+  { type: "range", group: "色彩", label: "强度", path: "intensity", min: 0.2, max: 2, step: 0.05, default: 1 },
+  { type: "range", group: "色彩", label: "辉光", path: "glow", min: 0, max: 2, step: 0.05, default: 1 },
+  { type: "range", group: "色彩", label: "不透明度", path: "opacity", min: 0.2, max: 1, step: 0.05, default: 1 },
+  // 玻璃 / Glass
+  { type: "toggle", group: "玻璃", label: "玻璃球", path: "glass", default: true },
+  { type: "range", group: "玻璃", label: "球体大小", path: "glassSize", min: 0.4, max: 1.6, step: 0.05, default: 1 },
+  { type: "range", group: "玻璃", label: "折射", path: "refraction", min: 0, max: 1.8, step: 0.05, default: 1 },
+  { type: "range", group: "玻璃", label: "色散", path: "dispersion", min: 0, max: 2, step: 0.05, default: 1 },
+  { type: "range", group: "玻璃", label: "边缘光", path: "rim", min: 0, max: 2, step: 0.05, default: 1 },
+  { type: "toggle", group: "玻璃", label: "浅色模式", path: "lightMode", default: false },
+  // 动态 / Motion
+  { type: "range", group: "动态", label: "流动速度", path: "speed", min: 0, max: 3, step: 0.05, default: 1 },
+  { type: "range", group: "动态", label: "能量", path: "energy", min: 0, max: 1, step: 0.05, default: 0.65 },
+  { type: "toggle", group: "动态", label: "语音模拟", path: "listening", default: false },
+  // 交互 / Interaction
+  { type: "toggle", group: "交互", label: "指针互动", path: "interactive", default: true },
+  { type: "toggle", group: "交互", label: "点击脉冲", path: "clickPulse", default: true },
+  { type: "toggle", group: "交互", label: "入场动画", path: "intro", default: true },
+];
+
+/** Folds the lab-only `palette` select into Strands' 7-role `colors` array. */
+function StrandsLab(props: Record<string, unknown>) {
+  const { palette, ...rest } = props;
+  const colors = STRANDS_PALETTES[String(palette ?? "ember")] ?? STRANDS_PALETTES.ember;
+  return <Strands {...(rest as Record<string, unknown>)} colors={colors} />;
+}
+
+// ── StickerPeel parameter set ────────────────────────────────────────────────
+// WebGL2 die-cut sticker with a curling peel. `imageSrc` (required string) has
+// no matching control type, so it is pinned to a local transparent SVG via
+// previewProps. Callbacks (onDragStart/onDragEnd) and `initialPosition`/`dpr`
+// are likewise left out; every other control maps directly to a StickerPeel
+// prop. The component positions itself absolutely against its parent, so it
+// is mounted inside a sized, relative stage (see StickerPeelLab).
+const STICKERPEEL_CONTROLS: ControlDef[] = [
+  // 贴纸 / Sticker
+  { type: "range", group: "贴纸", label: "宽度", path: "width", min: 120, max: 300, step: 5, default: 200, unit: "px" },
+  { type: "range", group: "贴纸", label: "旋转", path: "rotate", min: -45, max: 45, step: 1, default: -8, unit: "°" },
+  {
+    type: "select", group: "贴纸", label: "质感", path: "finish", default: "gloss",
+    options: [
+      { label: "亮面", value: "gloss" },
+      { label: "哑光", value: "matte" },
+      { label: "镭射", value: "holo" },
+    ],
+  },
+  { type: "color", group: "贴纸", label: "背面颜色", path: "backColor", default: "#d4d4d8" },
+  // 撕角 / Peel
+  { type: "range", group: "撕角", label: "撕起方向", path: "peelDirection", min: 0, max: 360, step: 5, default: 270, unit: "°" },
+  { type: "range", group: "撕角", label: "悬停撕起", path: "peelBackHoverPct", min: 0, max: 70, step: 1, default: 25, unit: "%" },
+  { type: "range", group: "撕角", label: "拖拽撕起", path: "peelBackActivePct", min: 0, max: 90, step: 1, default: 42, unit: "%" },
+  { type: "range", group: "撕角", label: "卷曲半径", path: "curlRadius", min: 2, max: 40, step: 1, default: 14, unit: "px" },
+  // 光影 / Light
+  { type: "range", group: "光影", label: "光照强度", path: "lightingIntensity", min: 0, max: 1, step: 0.05, default: 0.6 },
+  { type: "range", group: "光影", label: "阴影强度", path: "shadowIntensity", min: 0, max: 1, step: 0.05, default: 0.6 },
+  // 物理 / Physics
+  { type: "range", group: "物理", label: "摆动", path: "swing", min: 0, max: 3, step: 0.05, default: 1 },
+  { type: "range", group: "物理", label: "摩擦", path: "friction", min: 0, max: 1, step: 0.05, default: 0.5 },
+  { type: "range", group: "物理", label: "回弹", path: "bounce", min: 0, max: 1, step: 0.05, default: 0.35 },
+  // 行为 / Behavior
+  { type: "toggle", group: "行为", label: "跟随指针", path: "followPointer", default: true },
+  { type: "toggle", group: "行为", label: "可拖拽", path: "draggable", default: true },
+  { type: "toggle", group: "行为", label: "入场动画", path: "intro", default: true },
+];
+
+/** StickerPeel is absolutely positioned against its parent and reads that
+ *  parent's clientWidth/Height. This wrapper supplies a sized relative stage.
+ *  It mounts the WebGL component only once the stage nears the viewport: the
+ *  lab keeps all 51 previews in the DOM, and holding one more always-on WebGL
+ *  context at load pushes headless Chrome's software renderer past its context
+ *  cap (starving earlier entries). Deferring keeps every preview healthy. */
+function StickerPeelLab(props: Record<string, unknown>) {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || ready) return;
+    const io = new IntersectionObserver(
+      entries => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setReady(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "240px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ready]);
+  return (
+    <div ref={stageRef} className="sticker-peel-stage">
+      {ready && <StickerPeel {...(props as unknown as StickerPeelProps)} />}
+    </div>
+  );
+}
+
+const PIXELTRAIL_EASINGS: Record<string, (x: number) => number> = {
+  linear: (x) => x,
+  easeOut: (x) => 1 - Math.pow(1 - x, 3),
+  easeInOut: (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+  back: (x) => 1 + 2.7 * Math.pow(x - 1, 3) + 1.7 * Math.pow(x - 1, 2),
+};
+
+const PIXELTRAIL_CONTROLS: ControlDef[] = [
+  // 网格 / Grid
+  { type: "range", group: "网格", label: "网格密度", path: "gridSize", min: 8, max: 90, step: 1, default: 40 },
+  {
+    type: "select", group: "网格", label: "像素形状", path: "shape", default: "square",
+    options: [
+      { label: "方形", value: "square" },
+      { label: "圆形", value: "circle" },
+      { label: "菱形", value: "diamond" },
+    ],
+  },
+  { type: "range", group: "网格", label: "像素间隙", path: "gap", min: 0, max: 0.6, step: 0.02, default: 0.08 },
+  { type: "range", group: "网格", label: "笔刷半径", path: "trailSize", min: 0.02, max: 0.4, step: 0.01, default: 0.12 },
+  // 拖尾 / Trail
+  { type: "range", group: "拖尾", label: "拖尾时长", path: "maxAge", min: 60, max: 900, step: 10, default: 320, unit: "ms" },
+  { type: "range", group: "拖尾", label: "插值密度", path: "interpolate", min: 0, max: 12, step: 1, default: 5 },
+  {
+    type: "select", group: "拖尾", label: "衰减方式", path: "decay", default: "fade",
+    options: [
+      { label: "淡出", value: "fade" },
+      { label: "收缩", value: "shrink" },
+      { label: "抖动", value: "dither" },
+    ],
+  },
+  { type: "range", group: "拖尾", label: "闪烁", path: "sparkle", min: 0, max: 1, step: 0.05, default: 0.12 },
+  // 流动 / Motion
+  { type: "range", group: "流动", label: "流动强度", path: "flow", min: 0, max: 1, step: 0.05, default: 0.3 },
+  { type: "range", group: "流动", label: "重力", path: "gravity", min: -1, max: 1, step: 0.05, default: 0 },
+  { type: "toggle", group: "流动", label: "点击迸发", path: "clickBurst", default: true },
+  // 外观 / Look
+  { type: "color", group: "外观", label: "主色", path: "color", default: "#7dd3fc" },
+  { type: "toggle", group: "外观", label: "渐变拖尾", path: "useTrailColor", default: false },
+  { type: "color", group: "外观", label: "拖尾色", path: "trailColor", default: "#f0abfc" },
+  { type: "range", group: "外观", label: "高光", path: "shine", min: 0, max: 1, step: 0.05, default: 0.6 },
+  { type: "range", group: "外观", label: "辉光", path: "glow", min: 0, max: 1, step: 0.05, default: 0.4 },
+  // 效果 / FX
+  { type: "toggle", group: "效果", label: "黏连融合", path: "gooey", default: true },
+  { type: "range", group: "效果", label: "融合强度", path: "gooStrength", min: 0, max: 6, step: 0.2, default: 2 },
+  {
+    type: "select", group: "效果", label: "缓动", path: "easeMode", default: "linear",
+    options: [
+      { label: "线性", value: "linear" },
+      { label: "缓出", value: "easeOut" },
+      { label: "缓入缓出", value: "easeInOut" },
+      { label: "回弹", value: "back" },
+    ],
+  },
+  { type: "toggle", group: "效果", label: "像素图案", path: "useImage", default: false },
+];
+
+/** PixelTrail takes a function/object `easingFunction`/`gooeyFilter` and an
+ *  optional image URL — none are basic control types. The wrapper folds the
+ *  lab-only scalar fields into those props. It also defers mounting the WebGL
+ *  component until the stage nears the viewport, keeping the always-on WebGL
+ *  context count under headless Chrome's software-renderer cap. */
+function PixelTrailLab(props: Record<string, unknown>) {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || ready) return;
+    const io = new IntersectionObserver(
+      entries => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setReady(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "240px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ready]);
+  const { gooey, gooStrength, easeMode, useTrailColor, trailColor, useImage, ...rest } = props;
+  const componentProps: PixelTrailProps = {
+    ...(rest as unknown as PixelTrailProps),
+    gooeyFilter: gooey ? { strength: Number(gooStrength ?? 2) } : false,
+    easingFunction: PIXELTRAIL_EASINGS[String(easeMode ?? "linear")] ?? PIXELTRAIL_EASINGS.linear,
+    trailColor: useTrailColor ? String(trailColor ?? "#f0abfc") : undefined,
+    imageSrc: useImage ? "/assets/sticker-51.svg" : undefined,
+  };
+  return (
+    <div ref={stageRef} className="pixel-trail-stage">
+      {ready && <PixelTrail {...componentProps} />}
+    </div>
+  );
+}
+
+const CUBES_CONTROLS: ControlDef[] = [
+  // 网格 / Grid
+  { type: "range", group: "网格", label: "网格尺寸", path: "gridSize", min: 3, max: 24, step: 1, default: 10 },
+  { type: "range", group: "网格", label: "间隙", path: "gap", min: 0, max: 0.7, step: 0.02, default: 0.18 },
+  { type: "range", group: "网格", label: "透视", path: "perspective", min: 0, max: 1, step: 0.05, default: 0 },
+  // 外观 / Look
+  { type: "color", group: "外观", label: "面颜色", path: "faceColor", default: "#120F17" },
+  { type: "color", group: "外观", label: "边颜色", path: "edgeColor", default: "#ffffff" },
+  { type: "range", group: "外观", label: "边宽度", path: "edgeWidth", min: 0, max: 4, step: 0.1, default: 1, unit: "px" },
+  {
+    type: "select", group: "外观", label: "边样式", path: "edgeStyle", default: "solid",
+    options: [
+      { label: "实线", value: "solid" },
+      { label: "虚线", value: "dashed" },
+      { label: "点线", value: "dotted" },
+      { label: "无", value: "none" },
+    ],
+  },
+  { type: "range", group: "外观", label: "面不透明度", path: "faceOpacity", min: 0, max: 1, step: 0.05, default: 1 },
+  { type: "range", group: "外观", label: "明暗", path: "shading", min: 0, max: 2, step: 0.05, default: 0.6 },
+  // 形变 / Motion
+  { type: "range", group: "形变", label: "最大倾角", path: "maxAngle", min: 0, max: 90, step: 1, default: 45, unit: "°" },
+  { type: "range", group: "形变", label: "影响半径", path: "radius", min: 0.5, max: 8, step: 0.1, default: 3 },
+  { type: "range", group: "形变", label: "速度", path: "speed", min: 0.1, max: 3, step: 0.05, default: 1 },
+  { type: "range", group: "形变", label: "回弹", path: "bounce", min: 0, max: 1, step: 0.05, default: 0.4 },
+  { type: "range", group: "形变", label: "笔刷惯性", path: "brush", min: 0, max: 3, step: 0.1, default: 1 },
+  // 涟漪 / Ripple
+  { type: "toggle", group: "涟漪", label: "点击涟漪", path: "rippleOnClick", default: true },
+  { type: "color", group: "涟漪", label: "涟漪颜色", path: "rippleColor", default: "#ffffff" },
+  { type: "range", group: "涟漪", label: "涟漪速度", path: "rippleSpeed", min: 0.1, max: 3, step: 0.05, default: 1 },
+  // 行为 / Behavior
+  { type: "toggle", group: "行为", label: "自动巡航", path: "autoAnimate", default: true },
+  { type: "toggle", group: "行为", label: "入场动画", path: "intro", default: true },
+  { type: "toggle", group: "行为", label: "暂停", path: "paused", default: false },
+];
+
+/** Cubes mounts a WebGL2 instanced-cube field. Like StickerPeel/PixelTrail it
+ *  defers mounting until the stage nears the viewport so the always-on WebGL
+ *  context count stays under headless Chrome's software-renderer cap. */
+function CubesLab(props: Record<string, unknown>) {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || ready) return;
+    const io = new IntersectionObserver(
+      entries => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setReady(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "240px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ready]);
+  return (
+    <div ref={stageRef} className="cubes-stage">
+      {ready && <Cubes {...(props as Record<string, unknown>)} />}
+    </div>
+  );
+}
+
+const METALLICPAINT_CONTROLS: ControlDef[] = [
+  // 材质 / Material
+  { type: "range", group: "材质", label: "密度", path: "density", min: 0.5, max: 12, step: 0.1, default: 2 },
+  { type: "range", group: "材质", label: "柔和度", path: "softness", min: 0, max: 1, step: 0.01, default: 0.1 },
+  { type: "range", group: "材质", label: "色散", path: "dispersion", min: -1, max: 1, step: 0.05, default: 0.3 },
+  { type: "range", group: "材质", label: "扭曲", path: "distortion", min: 0, max: 1, step: 0.01, default: 0.07 },
+  { type: "range", group: "材质", label: "轮廓弯曲", path: "edgeBend", min: 0, max: 1, step: 0.05, default: 0.6 },
+  // 光泽 / Sheen
+  { type: "range", group: "光泽", label: "光照角度", path: "angle", min: 0, max: 180, step: 1, default: 70, unit: "°" },
+  { type: "color", group: "光泽", label: "染色", path: "color", default: "#ffffff" },
+  { type: "toggle", group: "光泽", label: "浅色模式", path: "lightMode", default: false },
+  // 运动 / Motion
+  { type: "range", group: "运动", label: "流速", path: "speed", min: 0, max: 3, step: 0.05, default: 1 },
+  { type: "range", group: "运动", label: "缩放", path: "scale", min: 0.1, max: 1.2, step: 0.05, default: 0.6 },
+  { type: "range", group: "运动", label: "旋转", path: "rotation", min: -45, max: 45, step: 1, default: 0, unit: "°" },
+  { type: "range", group: "运动", label: "鼠标倾斜", path: "mouseTilt", min: 0, max: 1.5, step: 0.05, default: 0.5 },
+  // 行为 / Behavior
+  { type: "toggle", group: "行为", label: "入场动画", path: "intro", default: true },
+  { type: "toggle", group: "行为", label: "暂停", path: "paused", default: false },
+];
+
+/** MetallicPaint is a WebGL2 effect that precomputes a Poisson depth field on
+ *  a canvas before painting; deferring the mount keeps the always-on WebGL
+ *  context count under headless Chrome's software-renderer cap. `text` (a
+ *  string) has no control type and is pinned via previewProps. */
+function MetallicPaintLab(props: Record<string, unknown>) {
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || ready) return;
+    const io = new IntersectionObserver(
+      entries => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setReady(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "240px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ready]);
+  return (
+    <div ref={stageRef} className="metallic-paint-stage">
+      {ready && <MetallicPaint {...(props as Record<string, unknown>)} />}
+    </div>
+  );
+}
+
+/**
+ * TargetCursor is a body-level portal cursor. A ref-holding wrapper pipes the
+ * preview stage in as `container`, so the custom cursor (and native-cursor
+ * hiding) only activates inside the stage instead of the whole lab page.
+ */
+function TargetCursorLab(props: Record<string, unknown>) {
+  const ref = useRef<HTMLDivElement>(null);
+  return (
+    <div ref={ref} className="target-cursor-stage">
+      <div className="target-cursor-stage__intro">
+        <span className="target-cursor-stage__kicker">MOVE YOUR CURSOR HERE</span>
+        <span className="target-cursor-stage__title">目标光标</span>
+      </div>
+      <div className="target-cursor-stage__targets">
+        <button type="button" className="cursor-target target-cursor-stage__pill" data-cursor-label="按钮">悬停我</button>
+        <div className="cursor-target target-cursor-stage__card" data-cursor-label="卡片">CARD</div>
+        <div className="cursor-target target-cursor-stage__round" data-cursor-label="圆形">●</div>
+      </div>
+      <TargetCursor
+        {...(props as unknown as TargetCursorProps)}
+        container={ref as unknown as TargetCursorProps['container']}
+      />
+    </div>
+  );
+}
+
 const ENTRIES: ShowcaseEntry[] = [
   {
     id: "glimmer-vale",
@@ -2757,6 +3864,308 @@ const ENTRIES: ShowcaseEntry[] = [
     previewProps: {} as Record<string, unknown>,
     hint: "在框内按下并拖拽揉捏；切换材质看气球/镜面/果冻/黏土",
     controls: ELASTIC_CONTROLS,
+  },
+  {
+    id: "swarm-cursor",
+    index: "39",
+    name: "SwarmCursor",
+    tag: "React · WebGL2 · 粒子群光标",
+    description:
+      "一团可交互的粒子群跟随光标流动：靠近时聚拢、点击时爆发或脉冲，悬停在按钮/链接上时沿目标轮廓环流。内置无散度流体场、压力投影与空间哈希邻域，支持圆点/拖尾/方块三种形态与三种待机姿态。原生 WebGL2 实例化渲染，最多 2000 粒子。",
+    fileName: "SwarmCursor.tsx",
+    code: swarmCursorSrc,
+    Preview: SwarmCursor as unknown as ComponentType<Record<string, unknown>>,
+    // `children` demo content is pinned via previewProps (no text-input control
+    // type exists); buttons match the default `targets` selector so hovering
+    // them makes the swarm flow around their outline.
+    previewProps: {
+      children: (
+        <div className="swarm-cursor__demo">
+          <span className="swarm-cursor__demo-kicker">WEBGL2 · PARTICLE SWARM</span>
+          <strong className="swarm-cursor__demo-title">把光标交给粒子</strong>
+          <span className="swarm-cursor__demo-sub">移动引导 · 点击爆发 · 悬停按钮环绕</span>
+          <div className="swarm-cursor__demo-actions">
+            <button type="button" className="swarm-cursor__demo-btn">悬停我</button>
+            <button type="button" className="swarm-cursor__demo-btn">粒子环绕</button>
+          </div>
+        </div>
+      ),
+    } as Record<string, unknown>,
+    hint: "在框内移动鼠标引导粒子；点击迸发，悬停按钮看粒子沿轮廓环绕",
+    controls: SWARMCURSOR_CONTROLS,
+  },
+  {
+    id: "cursor-grid",
+    index: "40",
+    name: "CursorGrid",
+    tag: "React · WebGL2 · 光标响应网格",
+    description:
+      "一层随光标呼吸的网格：鼠标滑过点亮单元格、留下渐隐轨迹，点击扩散出一圈涟漪，加载时从中心揭开。支持实线/虚线/圆点/十字四种网格、区域/单元格两种高亮模式与自定义内容叠层。原生 WebGL2 单通道渲染。",
+    fileName: "CursorGrid.tsx",
+    code: cursorGridSrc,
+    Preview: CursorGrid as unknown as ComponentType<Record<string, unknown>>,
+    // `children` is pinned via previewProps (no text-input control type exists) to
+    // demonstrate the content overlay; controls supply the rest of the props.
+    previewProps: {
+      children: (
+        <div className="cursor-grid__demo">
+          <span className="cursor-grid__demo-kicker">WEBGL2 · CURSOR FIELD</span>
+          <strong className="cursor-grid__demo-title">动一动鼠标</strong>
+          <span className="cursor-grid__demo-sub">点亮网格 · 点击扩散涟漪</span>
+        </div>
+      ),
+    } as Record<string, unknown>,
+    hint: "在框内移动鼠标点亮网格；点击迸发涟漪，切样式/高亮模式看变化",
+    controls: CURSORGRID_CONTROLS,
+  },
+  {
+    id: "animated-content",
+    index: "41",
+    name: "AnimatedContent",
+    tag: "React · GSAP · 滚动入场动画",
+    description:
+      "基于 GSAP + ScrollTrigger 的内容入场容器：支持位移、缩放、模糊、旋转、3D 倾斜与渐变遮罩擦除，子元素可错落呈现。可绑定滚动触发或挂载即播，并支持滚动擦洗与动画后自动消失。",
+    fileName: "AnimatedContent.tsx",
+    code: animatedContentSrc,
+    Preview: AnimatedContent as unknown as ComponentType<Record<string, unknown>>,
+    // `trigger` defaults to "mount" so the card animates on preview load (the
+    // lab has no scroll container). `children` is pinned via previewProps since
+    // no text-input control type exists.
+    previewProps: {
+      trigger: "mount",
+      className: "animated-content-preview",
+      children: (
+        <div className="animated-content__demo">
+          <span className="animated-content__demo-kicker">GSAP · SCROLLTRIGGER</span>
+          <strong className="animated-content__demo-title">内容优雅登场</strong>
+          <span className="animated-content__demo-sub">位移 · 缩放 · 模糊 · 倾斜 · 擦除 · 错落</span>
+          <div className="animated-content__demo-chips">
+            <span>ENTER</span>
+            <span>STAGGER</span>
+            <span>REVEAL</span>
+          </div>
+        </div>
+      ),
+    } as Record<string, unknown>,
+    hint: "预览挂载即播放入场动画；切触发到滚动/调错落与擦除看不同效果",
+    controls: ANIMATEDCONTENT_CONTROLS,
+  },
+  {
+    id: "fade-content",
+    index: "42",
+    name: "FadeContent",
+    tag: "React · GSAP · 内容淡入动画",
+    description:
+      "基于 GSAP + ScrollTrigger 的内容淡入容器：淡入、聚焦、显影三种变换，以及溶解、薄雾、像素三种 SVG 噪点遮罩揭示。支持模糊、错落呈现、滚动擦洗与动画后自动消失。",
+    fileName: "FadeContent.tsx",
+    code: fadeContentSrc,
+    Preview: FadeContent as unknown as ComponentType<Record<string, unknown>>,
+    // `trigger` defaults to "mount" so the demo plays on preview load (the lab
+    // has no scroll container). `children` is pinned via previewProps since no
+    // text-input control type exists; multiple direct children make `stagger`
+    // visible when raised above 0.
+    previewProps: {
+      trigger: "mount",
+      className: "fade-content-preview",
+      children: (
+        <>
+          <span className="fade-content__demo-kicker">GSAP · SCROLLTRIGGER</span>
+          <strong className="fade-content__demo-title">内容柔和登场</strong>
+          <span className="fade-content__demo-sub">淡入 · 聚焦 · 显影 · 溶解 · 薄雾 · 像素</span>
+          <div className="fade-content__demo-chips">
+            <span>FADE</span>
+            <span>FOCUS</span>
+            <span>NOISE</span>
+          </div>
+        </>
+      ),
+    } as Record<string, unknown>,
+    hint: "预览挂载即播放淡入；切换效果/调模糊与错落看变化，噪点效果(溶解/薄雾/像素)尤为明显",
+    controls: FADECONTENT_CONTROLS,
+  },
+  {
+    id: "electric-border",
+    index: "43",
+    name: "ElectricBorder",
+    tag: "React · WebGL2 · 电光描边容器",
+    description:
+      "用原生 WebGL2 为任意内容包上一层游走的电光边框：多股电丝沿圆角矩形轮廓扭动、随机电弧跨越边角，鼠标靠近聚光、点击迸发脉冲与浪涌。基于圆角盒距离场、噪声形变与辉光合成着色器，全屏三角一次绘制。",
+    fileName: "ElectricBorder.tsx",
+    code: electricBorderSrc,
+    Preview: ElectricBorder as unknown as ComponentType<Record<string, unknown>>,
+    // `children` is a demo card pinned via previewProps (no text-input control
+    // type). The component sizes its canvas from the container box, so the demo
+    // card carries an explicit size; the frame style centers everything.
+    previewProps: {
+      children: (
+        <div className="electric-border__demo">
+          <span className="electric-border__demo-kicker">WEBGL2 · ELECTRIC</span>
+          <strong className="electric-border__demo-title">电光描边</strong>
+          <span className="electric-border__demo-sub">游走电丝 · 随机电弧 · 聚光脉冲</span>
+        </div>
+      ),
+    } as Record<string, unknown>,
+    hint: "鼠标靠近边框聚光、点击迸发脉冲电弧；调主色/辉光色/丝数与扩散看电光形态变化",
+    controls: ELECTRICBORDER_CONTROLS,
+  },
+  {
+    id: "orbit-images",
+    index: "44",
+    name: "OrbitImages",
+    tag: "React · SVG · 轨道图片轮播",
+    description:
+      "沿任意 SVG 路径（椭圆、星形、心形、无限、波浪等）环绕运行图片轮的组件：基于路径弧长采样与深度分层，实现近大远小的 3D 纵深感、悬停减速、拖拽惯性甩动、点击置前与入场铺展。支持自定义轨道形状、虚线路径和中心内容。",
+    fileName: "OrbitImages.tsx",
+    code: orbitImagesSrc,
+    Preview: OrbitImages as unknown as ComponentType<Record<string, unknown>>,
+    // `images` (array) and `centerContent` (ReactNode) have no matching control
+    // type — pinned via previewProps. Local SVG data-URIs replace the upstream
+    // picsum.photos URLs so the preview stays fully offline-safe.
+    previewProps: {
+      images: ORBIT_IMAGES,
+      centerContent: <h2 className="orbit-center-title">Moments</h2>,
+    } as Record<string, unknown>,
+    hint: "拖拽轨道惯性甩动、悬停图片减速、点击图片置前；切形状/调纵Radius与半径看轨道变化",
+    controls: ORBITIMAGES_CONTROLS,
+  },
+  {
+    id: "logo-loop",
+    index: "45",
+    name: "LogoLoop",
+    tag: "React · CSS 3D · 无限循环 Logo 墙",
+    description:
+      "高性能无限循环 Logo 跑马灯：直线、波浪、弧形、环绕四种排布，支持聚焦放大、鼠标放大镜、3D 倾斜、步进对齐、滚动加速与拖拽惯性甩动。基于副本拼接与几何投影引擎，配合边缘渐隐与入场错落，适合合作品牌墙与案例展示。",
+    fileName: "LogoLoop.tsx",
+    code: logoLoopSrc,
+    Preview: LogoLoop as unknown as ComponentType<Record<string, unknown>>,
+    // `logos` (LogoItem[]) has no matching control type — pinned via previewProps
+    // to local SVG wordmarks (each carries `title` so label modes work), fully
+    // offline-safe.
+    previewProps: {
+      logos: LOGOLOOP_LOGOS,
+    } as Record<string, unknown>,
+    hint: "拖拽甩动、悬停暂停/放大；切布局(波浪/弧形/环绕)与标签模式、调聚焦与倾斜看效果",
+    controls: LOGOLOOP_CONTROLS,
+  },
+  {
+    id: "target-cursor",
+    index: "46",
+    name: "TargetCursor",
+    tag: "React · Portal · 弹簧吸附光标",
+    description:
+      "一枚会自转的四角准星光标：空闲时缓慢旋转，悬停到目标上时四角弹簧吸附到目标边框、圆角自动匹配、标签浮出、颜色过渡；点击有回弹。用 portal 渲染到 body，通过 container 把作用域限制在预览舞台内，不干扰页面其它区域。",
+    fileName: "TargetCursor.tsx",
+    code: targetCursorSrc,
+    Preview: TargetCursorLab as ComponentType<Record<string, unknown>>,
+    hint: "把鼠标移进预览框，四角光标会吸附到「按钮/卡片/圆形」目标上并浮出标签",
+    controls: TARGETCURSOR_CONTROLS,
+  },
+  {
+    id: "ghost-cursor",
+    index: "47",
+    name: "GhostCursor",
+    tag: "WebGL2 · React · 幽灵烟雾光标",
+    description:
+      "一团跟着鼠标游走的幽灵烟雾：指针拖出带惯性的烟迹，湍流卷须与分形噪声让烟雾翻涌，点击迸出一团。原生 WebGL2 多通道模拟——漂浮密度场、法线光照着色、三级泛光降采样与合成，深色/浅色双主题，仅在指针停留时显现、离开后淡出。",
+    fileName: "GhostCursor.tsx",
+    code: ghostCursorSrc,
+    Preview: GhostCursor as ComponentType<Record<string, unknown>>,
+    hint: "把鼠标移进预览框拖出烟雾，点击迸发烟团；调尺寸/湍流/辉光与颜色看变化",
+    controls: GHOSTCURSOR_CONTROLS,
+  },
+  {
+    id: "click-spark",
+    index: "48",
+    name: "ClickSpark",
+    tag: "Canvas 2D · React · 点击火花迸发",
+    description:
+      "一次点击，火花从指尖四散迸发：线段、拖尾、圆点、星芒四种形状，支持多色渐变、弹性/渐出等缓动、重力下坠、扇形喷射、辉光与冲击波圆环。每次迸发按需创建一张贴合视口的 canvas，动画结束即销毁，并以 imperative handle 暴露 spark() 供程序化触发；自动尊重系统的减少动态偏好。",
+    fileName: "ClickSpark.tsx",
+    code: clickSparkSrc,
+    Preview: ClickSparkLab as ComponentType<Record<string, unknown>>,
+    hint: "在预览舞台任意位置点击（含「点我一下」按钮）迸发火花；切形状/配色/缓动、调数量半径与重力看变化",
+    controls: CLICKSPARK_CONTROLS,
+  },
+  {
+    id: "magnet",
+    index: "49",
+    name: "Magnet",
+    tag: "React · 弹簧物理 · 磁吸悬停",
+    description:
+      "一组会主动迎向鼠标的元素：指针进入感应范围后被弹簧力牵引过去，离开时回弹归位，可叠加 3D 倾斜与悬停缩放。用单个窗口级指针监听 + 全局仲裁器决定由谁吸附：开启独占时最近的那个胜出，关闭则范围内多个同时响应。弹簧刚度/阻尼/质量实时可调，并自动尊重减少动态偏好。",
+    fileName: "Magnet.tsx",
+    code: magnetSrc,
+    Preview: MagnetLab as ComponentType<Record<string, unknown>>,
+    hint: "把鼠标移近「悬停我 / CARD / 圆形」看它们被吸过去；调感应范围、力度、弹簧参数与独占开关",
+    controls: MAGNET_CONTROLS,
+  },
+  {
+    id: "strands",
+    index: "50",
+    name: "Strands",
+    tag: "WebGL2 · GLSL · 玻璃光丝球",
+    description:
+      "一团封在玻璃球里的极光丝带：暖色主干与冷色波纹在球内翻涌，经折射与色散扭曲后透出边缘高光。全程在片元着色器里解析成形——解析式光带、平滑阶梯密度场、YIQ 色相旋转与色调映射，单三角形铺满画布；玻璃球/平面双模式、明暗双主题，指针倾斜、点击脉冲与语音模拟驱动能量起伏。",
+    fileName: "Strands.tsx",
+    code: strandsSrc,
+    Preview: StrandsLab as ComponentType<Record<string, unknown>>,
+    previewProps: { style: { minWidth: 0, minHeight: 0, width: "100%", height: "100%" } } as Record<string, unknown>,
+    hint: "鼠标在球上移动看倾斜/聚光，点击触发脉冲；切配色、玻璃/平面、明暗主题，调折射/色散/摆幅看变化",
+    controls: STRANDS_CONTROLS,
+  },
+  {
+    id: "sticker-peel",
+    index: "51",
+    name: "StickerPeel",
+    tag: "WebGL2 · React · 3D 撕角贴纸",
+    description:
+      "一枚可以被撕起、拖拽、甩动的模切贴纸：悬停时一角卷起、拖拽时整张贴纸跟手倾斜并甩出惯性，松手回弹归位。原生 WebGL2 多通道实现——按贴图 alpha 生成遮罩与凸包、96×96 网格顶点着色器做圆柱卷曲与光照、两个 FBO 做卷边模糊与投影，亮面/哑光/镭射三种质感，指针跟随光源与入场动画齐备。",
+    fileName: "StickerPeel.tsx",
+    code: stickerPeelSrc,
+    Preview: StickerPeelLab as ComponentType<Record<string, unknown>>,
+    previewProps: { imageSrc: "/assets/sticker-51.svg" } as Record<string, unknown>,
+    hint: "悬停贴纸看撕角卷起，按住拖拽甩动、松手回弹；切质感/背面色，调撕起方向、卷曲半径与光影",
+    controls: STICKERPEEL_CONTROLS,
+  },
+  {
+    id: "pixel-trail",
+    index: "52",
+    name: "PixelTrail",
+    tag: "WebGL2 · React · 像素化拖尾",
+    description:
+      "一根把鼠标轨迹逐格点亮的像素画笔：指针扫过留下随衰减淡出的像素方块，黏连融合把相邻像素揉成液态团块，另有收缩/抖动衰减、流动惯性与重力、闪烁、高光与辉光。原生 WebGL2 全屏片元着色器——512² 轨迹场累积、erf 高斯积分做软边融合、Bayer 抖动与倒角着色，支持三种像素形状、双色拖尾渐变与图片取色模式。",
+    fileName: "PixelTrail.tsx",
+    code: pixelTrailSrc,
+    Preview: PixelTrailLab as ComponentType<Record<string, unknown>>,
+    hint: "在舞台里移动鼠标拖出像素轨迹，点击迸发一簇；切形状/衰减/缓动，调网格密度、黏连与配色看变化",
+    controls: PIXELTRAIL_CONTROLS,
+  },
+  {
+    id: "cubes",
+    index: "53",
+    name: "Cubes",
+    tag: "WebGL2 · React · 实例化立方体网格",
+    description:
+      "一片对着指针起伏倾斜的立方体矩阵：光标扫过，附近的方块像被拨动般依次翻起、回弹归位，点击荡开一圈涟漪；无人操作时自动巡航拨弄。原生 WebGL2 实例化渲染——单 draw call 画出整片网格，四元数插值做无万向锁旋转，弹簧阻尼驱动回弹，面/边双色着色配实线/虚线/点线描边，另有透视、入场错落与减少动态支持。",
+    fileName: "Cubes.tsx",
+    code: cubesSrc,
+    Preview: CubesLab as ComponentType<Record<string, unknown>>,
+    hint: "移动鼠标拨动方块、点击荡开涟漪；切边样式，调网格尺寸/倾角/回弹/透视与配色看变化",
+    controls: CUBES_CONTROLS,
+  },
+  {
+    id: "metallic-paint",
+    index: "54",
+    name: "MetallicPaint",
+    tag: "WebGL2 · React · 液态金属漆",
+    description:
+      "把文字或图片浇铸成会流动的液态金属：银白/彩色条带沿字形内部缓缓淌过，边缘折出虹彩色散，光标移动带动光泽倾斜。原生 WebGL2 实现——先把字形栅格化为遮罩，跑 40 次红黑高斯-赛德尔松弛解出泊松深度场，打包成通道贴图；片元着色器用 Simplex 噪声扭曲条纹、按深度做边缘增亮与三通道错位色散，配并行着色器编译与分帧任务调度避免卡顿。",
+    fileName: "MetallicPaint.tsx",
+    code: metallicPaintSrc,
+    Preview: MetallicPaintLab as ComponentType<Record<string, unknown>>,
+    previewProps: { text: "MOMO" } as Record<string, unknown>,
+    hint: "移动鼠标看金属光泽倾斜流淌；调密度/色散/扭曲/轮廓弯曲，切染色与浅色模式看质感变化",
+    controls: METALLICPAINT_CONTROLS,
   },
 ];
 
